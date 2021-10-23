@@ -101,11 +101,21 @@ public class Food implements Timed {
 
     public Map<String, Double> getMap() {
         Map<String, Double> map = new HashMap<>();
-        map.put("grade", this.grade);
-        map.put("calories", this.calories);
-        map.put("fats", this.fats);
-        map.put("carbs", this.carbs);
-        map.put("proteins", this.proteins);
+        if (this.grade != -1) {
+            map.put("grade", this.grade);
+        }
+        if (this.calories != -1) {
+            map.put("calories", this.calories);
+        }
+        if (this.fats != -1) {
+            map.put("fats", this.fats);
+        }
+        if (this.carbs != -1) {
+            map.put("carbs", this.carbs);
+        }
+        if (this.proteins != -1) {
+            map.put("proteins", this.proteins);
+        }
         return map;
     }
 

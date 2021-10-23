@@ -1,38 +1,41 @@
 package com.dh21.appleaday.data;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Util {
 
-    public static List<Long> getInterval(List<Long> times, long start, long end) {
-        // Binary search to find index of start time
-        int lower = 0;
-        int upper = times.size() - 1;
-        int startIndex = 0;
-        while (lower <= upper) {
-            startIndex = lower + (upper - lower) / 2;
-            if (start == times.get(startIndex)) {
-                break;
-            } else if (start < times.get(startIndex)) {
-                upper = startIndex - 1;
-            } else {
-                lower = startIndex + 1;
+    public static List<Timed> getInterval(List<Timed> times, long start, long end) {
+        int startIndex = Collections.binarySearch(times, new TimedDummy(start), new Comparator<Timed>() {
+            @Override
+            public int compare(Timed t1, Timed t2) {
+                if (t1.getTime() < t2.getTime()) {
+                    return -1;
+                } else if (t1.getTime() > t2.getTime()) {
+                    return 1;
+                }
+                return 0;
             }
-        }
+        });
 
-        // Binary search to find index of end time
-        lower = 0;
-        upper = times.size() - 1;
-        int endIndex = 0;
-        while (lower <= upper) {
-            endIndex = lower + (upper - lower) / 2;
-            if (end == times.get(endIndex)) {
-                break;
-            } else if (end < times.get(endIndex)) {
-                upper = endIndex - 1;
-            } else {
-                lower = endIndex + 1;
+        int endIndex = Collections.binarySearch(times, new TimedDummy(end), new Comparator<Timed>() {
+            @Override
+            public int compare(Timed t1, Timed t2) {
+                if (t1.getTime() < t2.getTime()) {
+                    return -1;
+                } else if (t1.getTime() > t2.getTime()) {
+                    return 1;
+                }
+                return 0;
             }
+        });
+
+        if (startIndex < 0) {
+            startIndex = -(startIndex + 1);
+        }
+        if (endIndex < 0) {
+            endIndex = -(endIndex + 1) - 1;
         }
         return times.subList(startIndex, endIndex + 1);
     }
