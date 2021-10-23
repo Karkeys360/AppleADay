@@ -1,6 +1,6 @@
 package com.dh21.appleaday.data;
 
-public class Event {
+public class Event implements Time {
 
     private String name;
     private long time;

@@ -3,7 +3,7 @@ package com.dh21.appleaday.data;
 import java.util.Set;
 import java.util.HashSet;
 
-public class Food {
+public class Food implements Time {
 
     private String name;
     private long time;
