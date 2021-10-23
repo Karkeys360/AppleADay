@@ -1,12 +1,10 @@
 package com.dh21.appleaday;
 
-import java.sql.Array;
-import java.sql.SQLOutput;
 import java.util.*;
 
 import com.dh21.appleaday.data.Food;
 import com.google.gson.Gson;
-import com.google.gson.JsonParser;
+
 
 public class ParseFoodFacts {
     public static String fullJson;
@@ -45,11 +43,9 @@ public class ParseFoodFacts {
 
         double carbs = getNutrient(nutrients, "carbohydrates_serving");
 
-        Food f = new Food(name, grades.get(grade), Calories, fats, carbs,
+
+        return new Food(name, grades.get(grade), Calories, fats, carbs,
                 protein, sugars, fiber, sodium, ing);
-
-
-        return f;
     }
 
     public static Double getNutrient(Map nutrients, String data) {
