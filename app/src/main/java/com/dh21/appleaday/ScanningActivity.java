@@ -77,6 +77,7 @@ public class ScanningActivity extends AppCompatActivity {
         }
 
         CompletableFuture<ImageAndInfo> imgCallback = new CompletableFuture<>();
+        // TODO: handle failures
         imgCallback.thenCompose(imageAndInfo -> {
             Image image = imageAndInfo.image;
             ImageInfo info = imageAndInfo.info;
@@ -90,8 +91,7 @@ public class ScanningActivity extends AppCompatActivity {
     }
 
     void handleResult(Food food) {
-        Log.d("Scanning_Activity", "Food: " + food.toString());
-        setResult();
+        Log.d("Scanning_Activity", "Food: " + food.getName());
         finish();
     }
 

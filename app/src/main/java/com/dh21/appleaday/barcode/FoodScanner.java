@@ -2,6 +2,7 @@ package com.dh21.appleaday.barcode;
 
 import android.util.Log;
 
+import com.dh21.appleaday.ParseFoodFacts;
 import com.dh21.appleaday.data.Food;
 import com.google.mlkit.vision.barcode.Barcode;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
@@ -20,20 +21,19 @@ public class FoodScanner {
             if (result.isPresent()) {
                 lookupFood(result.get(), callback);
             } else {
-                callback.cancel(false);
+                callback.completeExceptionally(new Exception());
             }
         }).addOnFailureListener(callback::completeExceptionally);
     }
 
     private static void lookupFood(Barcode barcode, CompletableFuture<Food> callback) {
-        // TODO: implement
-        callback.complete(new Food("blah"));
-//        throw new UnsupportedOperationException("Not implemented!");
+        String val = barcode.getRawValue();
+        Log.d("FoodScanner", "Barcode: " + val);
+        ParseFoodFacts.getFoodFacts(val, callback);
     }
 
     private static boolean isValid(Barcode barcode) {
-        // TODO: implement
-        return true;
-//        throw new UnsupportedOperationException("Not implemented!");
+        Log.d("FoodScanner", "Valid: " + (barcode.getValueType() == Barcode.TYPE_PRODUCT));
+        return barcode.getValueType() == Barcode.TYPE_PRODUCT;
     }
 }
