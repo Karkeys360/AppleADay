@@ -10,9 +10,18 @@ import com.google.gson.JsonParser;
 
 public class ParseFoodFacts {
     public static String fullJson;
+    public static Map<String, Double> grades = new HashMap<>();
+
+    static {
+        grades.put("a", 0.0);
+        grades.put("b", 1.0);
+        grades.put("c", 2.0);
+        grades.put("d", 3.0);
+        grades.put("e", 4.0);
+    }
 
 
-    public static Map getFoodFacts(String barcode) {
+    public static Food getFoodFacts(String barcode) {
         fullJson = HttpQuery.getFoodFacts(barcode);
 
         Gson parser = new Gson();
@@ -22,17 +31,25 @@ public class ParseFoodFacts {
         Set<String> ing = getIngredients(product);
         String grade = (String) product.get("nutriscore_grade");
         Map nutrients = (Map) product.get("nutriments");
-        double Calories = getNutrient(nutrients,"energy-kcal_serving");
+        double Calories = getNutrient(nutrients, "energy-kcal_serving");
+
         double fats = getNutrient(nutrients, "fat_serving");
+
         double protein = getNutrient(nutrients, "proteins_serving");
-        double fiber = getNutrient(nutrients,"fiber_serving");
+
+        double fiber = getNutrient(nutrients, "fiber_serving");
+
         double sodium = getNutrient(nutrients, "sodium_serving");
+
         double sugars = getNutrient(nutrients, "sugars_serving");
+
         double carbs = getNutrient(nutrients, "carbohydrates_serving");
 
+        Food f = new Food(name, grades.get(grade), Calories, fats, carbs,
+                protein, sugars, fiber, sodium, ing);
 
 
-        return product;
+        return f;
     }
 
     public static Double getNutrient(Map nutrients, String data) {
@@ -48,14 +65,5 @@ public class ParseFoodFacts {
         }
         return ingredients;
     }
-
-
-    public static void main(String[] args) {
-        String barcode = "044000033279";
-        Map m = ParseFoodFacts.getFoodFacts(barcode);
-        // System.out.println(ParseFoodFacts.getFoodFacts(barcode));
-        //System.out.println(m);
-    }
-
 
 }
