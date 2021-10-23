@@ -69,6 +69,14 @@ public class Food implements Timed {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getFats() {
+        return fats;
+    }
+
     public void setGrade(String grade) {
         this.grade = grade;
     }
