@@ -1,13 +1,13 @@
 package com.dh21.appleaday;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 import com.dh21.appleaday.data.Food;
 import com.google.gson.Gson;
 
 
 public class ParseFoodFacts {
-    public static String fullJson;
     public static Map<String, Double> grades = new HashMap<>();
 
     static {
@@ -18,12 +18,15 @@ public class ParseFoodFacts {
         grades.put("e", 4.0);
     }
 
+    public static void getFoodFacts(String barcode, CompletableFuture<Food> callback) {
+        CompletableFuture<String> future = new CompletableFuture<>();
+        future.thenApply(ParseFoodFacts::parseFood).thenAccept(callback::complete);
+        HttpQuery.getFoodFactsAsync(barcode, future);
+    }
 
-    public static Food getFoodFacts(String barcode) {
-        fullJson = HttpQuery.getFoodFacts(barcode);
-
+    public static Food parseFood(String json) {
         Gson parser = new Gson();
-        Map map = parser.fromJson(fullJson, Map.class);
+        Map map = parser.fromJson(json, Map.class);
         Map product = (Map) map.get("product");
         String name = (String) product.get("product_name");
         Set<String> ing = getIngredients(product);
