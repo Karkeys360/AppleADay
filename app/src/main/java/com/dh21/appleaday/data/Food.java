@@ -35,7 +35,7 @@ public class Food implements Timed {
 
     public Food(String name, double grade, double calories, double fats,
                 double carbs, double proteins, double sugars, double fiber,double sodium, Set<String> ingredients) {
-        this.name = name;
+        this.name = name ;
         this.time = System.currentTimeMillis();
         this.grade = grade;
         this.calories = calories;
@@ -154,6 +154,15 @@ public class Food implements Timed {
             map.put("carbs", this.carbs);
         }
         if (this.proteins != -1) {
+            map.put("proteins", this.proteins);
+        }
+        if (this.sodium != -1) {
+            map.put("proteins", this.proteins);
+        }
+        if (this.fiber != -1) {
+            map.put("proteins", this.proteins);
+        }
+        if (this.sugars != -1) {
             map.put("proteins", this.proteins);
         }
         return map;

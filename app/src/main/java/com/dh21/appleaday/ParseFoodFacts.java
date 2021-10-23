@@ -49,7 +49,7 @@ public class ParseFoodFacts {
     }
 
     public static Double getNutrient(Map nutrients, String data) {
-        return (double) nutrients.get(data);
+        return (double) (nutrients.get(data) != null ? nutrients.get(data) : -1);
     }
 
     public static Set<String> getIngredients(Map product) {
