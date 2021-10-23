@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
+import androidx.camera.core.ImageInfo;
 import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
@@ -13,8 +14,8 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,7 +25,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.dh21.appleaday.barcode.FoodScanner;
+import com.dh21.appleaday.data.Food;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.mlkit.vision.common.InputImage;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -72,7 +76,23 @@ public class ScanningActivity extends AppCompatActivity {
             throw new AssertionError("Assertion failed");
         }
 
-        imageCapture.takePicture(ContextCompat.getMainExecutor(this), );
+        CompletableFuture<ImageAndInfo> imgCallback = new CompletableFuture<>();
+        imgCallback.thenCompose(imageAndInfo -> {
+            Image image = imageAndInfo.image;
+            ImageInfo info = imageAndInfo.info;
+            InputImage inputImage = InputImage.fromMediaImage(image, info.getRotationDegrees());
+            CompletableFuture<Food> foodCallback = new CompletableFuture<>();
+            FoodScanner.scanBarcode(inputImage, foodCallback);
+            return foodCallback;
+        }).thenAccept(this::handleResult);
+        imageCapture.takePicture(
+                ContextCompat.getMainExecutor(this), new ImageListener(imgCallback));
+    }
+
+    void handleResult(Food food) {
+        Log.d("Scanning_Activity", "Food: " + food.toString());
+        setResult();
+        finish();
     }
 
     void bindAll() {
@@ -91,22 +111,39 @@ public class ScanningActivity extends AppCompatActivity {
         cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, imageCapture, preview);
     }
 
-    private class ImageListener extends ImageCapture.OnImageCapturedCallback {
+    private static class ImageAndInfo {
+        private Image image;
+        private ImageInfo info;
 
-        private CompletableFuture<Image> callback;
+        public ImageAndInfo(Image image, ImageInfo info) {
+            this.image = image;
+            this.info = info;
+        }
+    }
 
-        public ImageListener(CompletableFuture<Image> callback) {
+    private static class ImageListener extends ImageCapture.OnImageCapturedCallback {
+
+        private CompletableFuture<ImageAndInfo> callback;
+
+        public ImageListener(CompletableFuture<ImageAndInfo> callback) {
             this.callback = callback;
         }
 
         @Override
         public void onError(@NonNull ImageCaptureException exception) {
-            super.onError(exception);
+            callback.completeExceptionally(exception);
         }
 
         @Override
-        public void onCaptureSuccess(@NonNull ImageProxy image) {
-
+        public void onCaptureSuccess(@NonNull ImageProxy imageProxy) {
+            Image image = imageProxy.getImage();
+            if (image == null) {
+                callback.completeExceptionally(
+                        new ImageCaptureException(
+                                ImageCapture.ERROR_CAPTURE_FAILED, "Capture failed!", null));
+            } else {
+                callback.complete(new ImageAndInfo(image, imageProxy.getImageInfo()));
+            }
         }
     }
 }
