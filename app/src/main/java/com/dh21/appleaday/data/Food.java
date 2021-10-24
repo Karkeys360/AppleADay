@@ -43,6 +43,10 @@ public class Food implements Timed {
         return this.time;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
     public double getGrade() {
         return this.grade;
     }

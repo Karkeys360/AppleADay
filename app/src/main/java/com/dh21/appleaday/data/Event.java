@@ -18,6 +18,10 @@ public class Event implements Timed {
         this.severity = severity;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
     public long getTime() {
         return this.time;
     }
