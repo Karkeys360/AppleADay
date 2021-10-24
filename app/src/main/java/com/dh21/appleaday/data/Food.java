@@ -157,13 +157,13 @@ public class Food implements Timed {
             map.put("proteins", this.proteins);
         }
         if (this.sodium != -1) {
-            map.put("proteins", this.proteins);
+            map.put("sodium", this.sodium);
         }
         if (this.fiber != -1) {
-            map.put("proteins", this.proteins);
+            map.put("fiber", this.fiber);
         }
         if (this.sugars != -1) {
-            map.put("proteins", this.proteins);
+            map.put("sugars", this.sugars);
         }
         return map;
     }
