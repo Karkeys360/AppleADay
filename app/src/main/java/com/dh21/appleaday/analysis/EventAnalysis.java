@@ -1,9 +1,9 @@
 package com.dh21.appleaday.analysis;
 
+import com.dh21.appleaday.data.DataUtil;
 import com.dh21.appleaday.data.Event;
 import com.dh21.appleaday.data.Food;
 import com.dh21.appleaday.data.Timed;
-import com.dh21.appleaday.data.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,7 +114,7 @@ public class EventAnalysis {
 
                 // check how many events this food may have caused
                 if (food.getName().equals(foodName)) {
-                    List<Timed> interval = Util.getInterval(times, food.getTime(), food.getTime() + intervalLengthMillis);
+                    List<Timed> interval = DataUtil.getInterval(times, food.getTime(), food.getTime() + intervalLengthMillis);
                     cnt += getNumEventsWithName(interval, eventName);
                 }
             } catch (Exception e) {
