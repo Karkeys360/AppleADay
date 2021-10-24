@@ -88,6 +88,7 @@ public class EnterEventDialog extends DialogFragment {
                    public void onClick(DialogInterface dialog, int id) {
                        EventAnalysis ea = EventAnalysis.getInstance();
 
+                       // save the event
                        if (selectedItemId[0] >= 0) {
                            // Log.d(EVENT_CATEGORIES[selectedItemId[0]].toString() + "", "HULLO");
                            ea.addTime(new Event(EVENT_CATEGORIES[selectedItemId[0]].toString()));
@@ -97,7 +98,6 @@ public class EnterEventDialog extends DialogFragment {
                .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
                    public void onClick(DialogInterface dialog, int id) {
                        // don't save the event
-                       Log.d("HULLABALOO 3 ", "" + id);
                    }
                }).create();
     }
