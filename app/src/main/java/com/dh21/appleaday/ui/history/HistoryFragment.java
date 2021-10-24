@@ -27,13 +27,6 @@ public class HistoryFragment extends Fragment {
         binding = FragmentHistoryBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textHistory;
-        historyViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
         return root;
     }
 

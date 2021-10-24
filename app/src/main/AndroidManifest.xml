@@ -3,7 +3,9 @@
     package="com.dh21.appleaday">
 
     <uses-feature android:name="android.hardware.camera.any" />
+
     <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,7 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ScanningActivity"></activity>
+        <activity
+            android:name=".AddFoodItemsActivity"
+            android:label="@string/title_activity_add_food_items"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".ScanningActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
