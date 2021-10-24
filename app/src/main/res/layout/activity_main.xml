@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="?attr/actionBarSize">
+    android:layout_height="match_parent">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
@@ -26,18 +25,18 @@
         android:layout_height="match_parent"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toTopOf="@id/nav_view"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="1.0"
         app:navGraph="@navigation/mobile_navigation" />
 
     <Button
         android:id="@+id/button8"
         android:layout_width="350dp"
         android:layout_height="45dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="110dp"
         android:background="@drawable/roundedbutton"
         android:padding="5dp"
         android:text="@string/add_meal"
@@ -55,7 +54,7 @@
         android:id="@+id/button9"
         android:layout_width="350dp"
         android:layout_height="45dp"
-        android:layout_marginTop="300dp"
+        android:layout_marginTop="400dp"
         android:background="@drawable/roundedbutton"
         android:padding="5dp"
         android:text="@string/add_event"
@@ -71,7 +70,7 @@
         android:id="@+id/table2"
         android:layout_width="370dp"
         android:layout_height="220dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="170dp"
         android:background="@drawable/data_display"
         app:layout_constraintEnd_toStartOf="@+id/nav_host_fragment_activity_main"
         app:layout_constraintHorizontal_bias="0.5"
@@ -118,7 +117,7 @@
     <GridLayout
         android:layout_width="370dp"
         android:layout_height="220dp"
-        android:layout_marginTop="360dp"
+        android:layout_marginTop="460dp"
         android:background="@drawable/data_display"
         app:layout_constraintEnd_toStartOf="@+id/nav_host_fragment_activity_main"
         app:layout_constraintHorizontal_bias="0.5"
@@ -163,6 +162,58 @@
 
 
     </GridLayout>
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/imageView4"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="152dp"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/nav_host_fragment_activity_main"-->
+    <!--        app:layout_constraintHorizontal_bias="0.5"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/nav_host_fragment_activity_main"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:srcCompat="@mipmap/ic_launcher_foreground" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/textView2"-->
+    <!--        android:layout_width="254dp"-->
+    <!--        android:layout_height="96dp"-->
+    <!--        android:layout_marginEnd="20dp"-->
+    <!--        android:text="\nApple A Day"-->
+    <!--        android:textColor="@color/pillBlue"-->
+    <!--        android:textSize="35sp"-->
+    <!--        android:textStyle="bold"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <LinearLayout
+        android:layout_width="408dp"
+        android:layout_height="110dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            app:srcCompat="@mipmap/ic_launcher_foreground" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="300dp"
+            android:layout_height="110dp"
+            android:layout_marginTop="1dp"
+            android:text="Apple A Day"
+            android:gravity="center|start"
+            android:textColor="@color/deep_red"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
