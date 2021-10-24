@@ -5,6 +5,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
@@ -75,9 +76,13 @@ public class HomeFragment extends Fragment {
     }
 
     public void openEnterEvent(View view) {
-        DialogFragment fragment = new EnterEventDialog();
-        fragment.show(getActivity().getSupportFragmentManager(), "enter_events");
+        DialogFragment fragment = new EnterEventDialog(() -> {
+            Log.d("HomeFragment", "Event added!");
+            populateEventData();
+        });
+        fragment.show(requireActivity().getSupportFragmentManager(), "enter_events");
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -99,9 +104,14 @@ public class HomeFragment extends Fragment {
         binding.eventRow.setGravity(Gravity.CENTER);
         binding.eventRow.setTextColor(Color.WHITE);
 
-        EventAnalysis ea = EventAnalysis.getInstance();
-        List<Timed> timeds = ea.getTimes();
+        populateFoodData();
+        populateEventData();
+    }
+
+    private void populateEventData() {
+        List<Timed> timeds = EventAnalysis.getInstance().getTimes();
         int added = 0;
+        binding.eventsTable.removeAllViews();
         for (int i = timeds.size() - 1; i >= 0 && added < NUM_DISPLAYED; i--) {
             Timed t = timeds.get(i);
             if (t instanceof Event) {
@@ -110,7 +120,12 @@ public class HomeFragment extends Fragment {
                 added++;
             }
         }
-        added = 0;
+    }
+
+    private void populateFoodData() {
+        int added = 0;
+        List<Timed> timeds = EventAnalysis.getInstance().getTimes();
+        binding.mealsTable.removeAllViews();
         for (int i = timeds.size() - 1; i >= 0 && added < NUM_DISPLAYED; i--) {
             Timed t = timeds.get(i);
             if (t instanceof Food){
@@ -119,21 +134,13 @@ public class HomeFragment extends Fragment {
                 added++;
             }
         }
+        binding.mealsTable.invalidate();
     }
+
     private String titleCase(String str) {
         return Arrays.stream(str.split("\\s"))
                 .map(s -> s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase())
                 .collect(Collectors.joining(" "));
-    }
-    private View.OnClickListener createEditClickListener(Timed obj) {
-        return v -> {
-            Class<?> dest = (obj instanceof Food) ? FoodEditorActivity.class :
-                    EventEditorActivity.class;
-            String json = new Gson().toJson(obj);
-            Intent intent = new Intent(getActivity(), dest);
-            intent.putExtra("event", json);
-            startActivity(intent);
-        };
     }
 
     private void addRowToLayout(GridLayout gl, String name, long timestamp, int row) {
@@ -160,14 +167,12 @@ public class HomeFragment extends Fragment {
         nameText.setLayoutParams(createGLParam(row, 0));
         dateText.setLayoutParams(createGLParam(row, 1));
     }
+
     private GridLayout.LayoutParams createGLParam(int r, int c) {
         GridLayout.LayoutParams param =new GridLayout.LayoutParams();
         param.height = GridLayout.LayoutParams.WRAP_CONTENT;
         param.width = GridLayout.LayoutParams.WRAP_CONTENT;
         param.setMargins(0, dpToPixels(ROW_PADDING), 0, dpToPixels(ROW_PADDING));
-//        param.rightMargin = 5;
-//        param.topMargin = 5;
-//        param.setGravity(Gravity.CENTER);
         param.columnSpec = GridLayout.spec(c, 1f);
         param.rowSpec = GridLayout.spec(r);
         return param;

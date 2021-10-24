@@ -55,6 +55,7 @@ public class ParseFoodFacts {
 
     public static Set<String> getIngredients(Map product) {
         ArrayList<Map> ingredientsObj = (ArrayList<Map>) product.get("ingredients");
+        if (ingredientsObj == null) return new HashSet<>();
         Set<String> ingredients = new HashSet<>();
         for (int i = 0; i < ingredientsObj.size(); i++) {
             String item = (String) ingredientsObj.get(i).get("id");

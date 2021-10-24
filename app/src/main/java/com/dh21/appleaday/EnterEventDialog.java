@@ -34,8 +34,11 @@ public class EnterEventDialog extends DialogFragment {
     private String mParam1;
     private String mParam2;
 
-    public EnterEventDialog() {
+    private Runnable callback;
+
+    public EnterEventDialog(Runnable callback) {
         // Required empty public constructor
+        this.callback = callback == null ? () -> {} : callback;
     }
 
     /**
@@ -48,7 +51,7 @@ public class EnterEventDialog extends DialogFragment {
      */
     // TODO: Rename and change types and number of parameters
     public static EnterEventDialog newInstance(String param1, String param2) {
-        EnterEventDialog fragment = new EnterEventDialog();
+        EnterEventDialog fragment = new EnterEventDialog(null);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -92,6 +95,7 @@ public class EnterEventDialog extends DialogFragment {
                        if (selectedItemId[0] >= 0) {
                            // Log.d(EVENT_CATEGORIES[selectedItemId[0]].toString() + "", "HULLO");
                            ea.addTime(new Event(EVENT_CATEGORIES[selectedItemId[0]].toString()));
+                           callback.run();
                        }
                    }
                })
