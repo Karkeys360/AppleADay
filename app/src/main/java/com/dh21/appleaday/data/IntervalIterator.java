@@ -33,31 +33,47 @@ public class IntervalIterator {
 
         long startMilli = endMilli;
         Calendar startDate = (Calendar) endDate.clone();
+        int year = endDate.get(Calendar.YEAR);
 
         switch (interval) {
             case Day:
                 int day = endDate.get(Calendar.DAY_OF_YEAR);
-                while (startDate.get(Calendar.DAY_OF_YEAR) == day && startIndex != -1) {
+                while (startDate.get(Calendar.DAY_OF_YEAR) == day &&
+                        startDate.get(Calendar.YEAR) == year && startIndex != 0) {
+                    startIndex -= 1;
                     startMilli = times.get(startIndex).getTime();
                     startDate.setTimeInMillis(startMilli);
+                }
+                if (startIndex == 0 && startDate.get(Calendar.DAY_OF_YEAR) == day &&
+                    startDate.get(Calendar.YEAR) == year) {
                     startIndex -= 1;
                 }
                 break;
 
             case Week:
-                int week = endDate.get(Calendar.WEEK_OF_MONTH);
-                while (startDate.get(Calendar.WEEK_OF_MONTH) == week && startIndex != -1) {
+                int week = endDate.get(Calendar.WEEK_OF_YEAR);
+                while (startDate.get(Calendar.WEEK_OF_YEAR) == week &&
+                        startDate.get(Calendar.YEAR) == year && startIndex != 0) {
+                    startIndex -= 1;
                     startMilli = times.get(startIndex).getTime();
                     startDate.setTimeInMillis(startMilli);
+                }
+                if (startIndex == 0 && startDate.get(Calendar.WEEK_OF_YEAR) == week &&
+                    startDate.get(Calendar.YEAR) == year) {
                     startIndex -= 1;
                 }
                 break;
 
             case Month:
                 int month = endDate.get(Calendar.MONTH);
-                while (startDate.get(Calendar.MONTH) == month && startIndex != -1) {
+                while (startDate.get(Calendar.MONTH) == month &&
+                        startDate.get(Calendar.YEAR) == year && startIndex != 0) {
+                    startIndex -= 1;
                     startMilli = times.get(startIndex).getTime();
                     startDate.setTimeInMillis(startMilli);
+                }
+                if (startIndex == 0 && startDate.get(Calendar.MONTH) == month &&
+                    startDate.get(Calendar.YEAR) == year) {
                     startIndex -= 1;
                 }
                 break;
