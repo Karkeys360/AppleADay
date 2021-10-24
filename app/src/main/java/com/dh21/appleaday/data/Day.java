@@ -1,16 +1,16 @@
 package com.dh21.appleaday.data;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.ArrayList;
 
 public class Day {
 
-    private Date date;
+    private Calendar date;
     private List<Food> foods;
     private List<Event> events;
 
-    public Day(Date date) {
+    public Day(Calendar date) {
         this.date = date;
         this.foods = new ArrayList<>();
         this.events = new ArrayList<>();
