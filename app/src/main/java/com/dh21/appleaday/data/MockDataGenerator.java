@@ -13,7 +13,7 @@ public class MockDataGenerator {
     public static final int MEALS_IN_DAY = 4;
     public static final long MILLIS_IN_DAY = 86400000;
     public static final long MILLIS_BETWEEN_MEALS = 9000000;  // 2.5 hours
-    public static final long MILLIS_TILL_EVENT =7200000;  // 2 hours
+    public static final long MILLIS_TILL_EVENT = 7200000;  // 2 hours
     public static final long MILLIS_OF_FIRST_MEAL = 1577901600000L;  // 1/1/2020 11 AM PST
 
     public static void generate () {
@@ -116,21 +116,25 @@ public class MockDataGenerator {
                     Event event = new Event("diarrhea");
                     event.setSeverity(5);
                     event.setTime(time + MILLIS_TILL_EVENT);
+                    times.add(event);
                 }
                 if (hasFlatulence) {
                     Event event = new Event("flatulence");
                     event.setSeverity(5);
                     event.setTime(time + MILLIS_TILL_EVENT);
+                    times.add(event);
                 }
                 if (hasBloating) {
                     Event event = new Event("bloating");
                     event.setSeverity(5);
                     event.setTime(time + MILLIS_TILL_EVENT);
+                    times.add(event);
                 }
                 if (hasConstipation) {
                     Event event = new Event("constipation");
                     event.setSeverity(5);
                     event.setTime(time + MILLIS_TILL_EVENT);
+                    times.add(event);
                 }
             }
         }
