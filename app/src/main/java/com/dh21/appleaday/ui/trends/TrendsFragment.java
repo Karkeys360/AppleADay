@@ -2,7 +2,6 @@ package com.dh21.appleaday.ui.trends;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import com.dh21.appleaday.analysis.EventAnalysis;
 import com.dh21.appleaday.data.DataUtil;
 import com.dh21.appleaday.data.Food;
 import com.dh21.appleaday.data.IntervalIterator;
-import com.dh21.appleaday.data.MockDataGenerator;
 import com.dh21.appleaday.data.Timed;
 import com.dh21.appleaday.databinding.FragmentTrendsBinding;
 import com.github.mikephil.charting.charts.BarChart;
@@ -29,18 +27,15 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 public class TrendsFragment extends Fragment {
 
@@ -183,38 +178,13 @@ public class TrendsFragment extends Fragment {
         return createChartAndTitle(title, chart, last);
     }
 
-    private List<Entry> createCalorieData(IntervalIterator.Interval interval) {
-        List<Entry> entries = new ArrayList<>();
-        for (int i = -20; i <= 0; i++) {
-            float val = (float) Math.random() * 1000;
-            LocalDate ld = null;
-            switch (interval) {
-                case Day:
-                    ld = LocalDate.now().plusDays(i);
-                    break;
-
-                case Week:
-                    ld = LocalDate.now().plusDays(7 * i);
-                    break;
-
-                case Month:
-                    ld = LocalDate.now().plusMonths(i);
-                    break;
-            }
-            entries.add(new Entry(val, ld.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()));
-        }
-        System.out.println(entries.stream().map(e -> e.time).map(Date::new)
-                .map(Date::toString).collect(Collectors.toList()));
-        return entries;
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
 
-    private class Entry {
+    private static class Entry {
         public float value;
         public long time;
 
