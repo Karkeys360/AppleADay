@@ -5,9 +5,6 @@ import java.util.List;
 
 public class IntervalIterator {
 
-    private static final long MILLIS_IN_A_DAY = 86400000;
-    private static final long MILLIS_IN_A_WEEK = 604800000;
-
     public static enum Interval {
         Day, Week, Month
     }
@@ -30,52 +27,42 @@ public class IntervalIterator {
         int endIndex = this.index;
         int startIndex = this.index;
 
-        long endMilli = times.get(endIndex).getTime() / MILLIS_IN_A_DAY;
+        long endMilli = times.get(endIndex).getTime();
         Calendar endDate = Calendar.getInstance();
         endDate.setTimeInMillis(endMilli);
 
-        long startMilli = times.get(startIndex).getTime() / MILLIS_IN_A_DAY;
-        Calendar startDate = Calendar.getInstance();
-        startDate.setTimeInMillis(startMilli);
+        long startMilli = endMilli;
+        Calendar startDate = (Calendar) endDate.clone();
 
         switch (interval) {
             case Day:
-                while (startMilli >= endMilli - MILLIS_IN_A_DAY &&
-                       startIndex != -1) {
+                int day = endDate.get(Calendar.DAY_OF_YEAR);
+                while (startDate.get(Calendar.DAY_OF_YEAR) == day && startIndex != -1) {
                     startIndex -= 1;
-                    startMilli = times.get(startIndex).getTime() / MILLIS_IN_A_DAY;
+                    startMilli = times.get(startIndex).getTime();
+                    startDate.setTimeInMillis(startMilli);
                 }
                 break;
 
             case Week:
-                while (startMilli >= endMilli - MILLIS_IN_A_WEEK &&
-                        startIndex != -1) {
+                int week = endDate.get(Calendar.WEEK_OF_MONTH);
+                while (startDate.get(Calendar.WEEK_OF_MONTH) == week && startIndex != -1) {
                     startIndex -= 1;
-                    startMilli = times.get(startIndex).getTime() / MILLIS_IN_A_DAY;
+                    startMilli = times.get(startIndex).getTime();
+                    startDate.setTimeInMillis(startMilli);
                 }
                 break;
 
             case Month:
                 int month = endDate.get(Calendar.MONTH);
-                if (month == 0) {
-                    while (startDate.get(Calendar.MONTH) == 0 ||
-                           startDate.get(Calendar.MONTH) == 12 ||
-                           startIndex == -1) {
-                        startIndex -= 1;
-                        startMilli = times.get(startIndex).getTime() / MILLIS_IN_A_DAY;
-                        startDate.setTimeInMillis(startMilli);
-                    }
-                } else {
-                    while (startDate.get(Calendar.MONTH) >= month + 1 || startIndex == -1) {
-                        startIndex -= 1;
-                        startMilli = times.get(startIndex).getTime() / MILLIS_IN_A_DAY;
-                        startDate.setTimeInMillis(startMilli);
-                    }
+                while (startDate.get(Calendar.MONTH) == month && startIndex != -1) {
+                    startIndex -= 1;
+                    startMilli = times.get(startIndex).getTime();
+                    startDate.setTimeInMillis(startMilli);
                 }
                 break;
         }
         this.index = startIndex;
         return times.subList(startIndex + 1, endIndex + 1);
     }
-
 }
