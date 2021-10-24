@@ -37,13 +37,11 @@ public class EventAnalysis {
     private int getNumEventsWithName(List<Timed> times, String eventName) {
         int numEvents = 0;
         for (Timed time : times) {
-            try {
+            if (time instanceof Event) {
                 Event event = (Event) time;
                 if (event.getName().equals(eventName)) {
                     numEvents++;
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
         return numEvents;
@@ -56,13 +54,11 @@ public class EventAnalysis {
     private int getNumFoodsWithName(List<Timed> times, String foodName) {
         int numFoods = 0;
         for (Timed time : times) {
-            try {
+            if (time instanceof Food) {
                 Food food = (Food) time;
                 if (food.getName().equals(foodName)) {
                     numFoods++;
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
         return numFoods;
@@ -71,11 +67,9 @@ public class EventAnalysis {
     public int getTotalEvents() {
         int numEvents = 0;
         for (Timed time : this.times) {
-            try {
+            if (time instanceof Event) {
                 Event event = (Event) time;
                 numEvents++;
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
         return numEvents;
@@ -84,11 +78,9 @@ public class EventAnalysis {
     public int getTotalFoods() {
         int numFoods = 0;
         for (Timed time : this.times) {
-            try {
+            if (time instanceof Food) {
                 Food food = (Food) time;
                 numFoods++;
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
         return numFoods;
@@ -109,7 +101,7 @@ public class EventAnalysis {
 
         int intervalLengthMillis = INTERVAL_LENGTH_DAYS * HOURS_PER_DAY * SECONDS_PER_HOUR * MILLIS_PER_SECOND;
         for (Timed time : times) {
-            try {
+            if (time instanceof Food) {
                 Food food = (Food) time;
 
                 // check how many events this food may have caused
@@ -117,8 +109,6 @@ public class EventAnalysis {
                     List<Timed> interval = DataUtil.getInterval(times, food.getTime(), food.getTime() + intervalLengthMillis);
                     cnt += getNumEventsWithName(interval, eventName);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
         return cnt;
