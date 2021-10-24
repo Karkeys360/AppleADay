@@ -42,7 +42,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <GridLayout
-        android:id="@+id/table2"
+        android:id="@+id/mealsTable"
         android:layout_width="wrap_content"
         android:layout_height="220dp"
         android:layout_marginTop="170dp"
@@ -52,21 +52,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TableRow
+        <TextView
+            android:id="@+id/mealRow"
             android:layout_width="167dp"
             android:layout_height="50dp"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:background="@drawable/pill_button_right" />
+            android:background="@drawable/pill_button_right"
+
+            app:layout_constraintStart_toStartOf="parent"
+            />
 
 
-        <TableRow
+        <TextView
+            android:id="@+id/dateRow"
             android:layout_width="167dp"
             android:layout_height="50dp"
             android:layout_marginStart="2dp"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:background="@drawable/pill_button_left" />
+            android:background="@drawable/pill_button_left"
+
+            />
 
         <ScrollView
             android:layout_width="336dp"
@@ -87,6 +94,7 @@
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:orientation="vertical" />
         </ScrollView>
+
     </GridLayout>
 
     <GridLayout
@@ -99,15 +107,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TableRow
+        <TextView
+            android:id="@+id/eventRow"
             android:layout_width="167dp"
             android:layout_height="50dp"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:background="@drawable/pill_button_right" />
 
-
-        <TableRow
+        <TextView
+            android:id="@+id/eventDateRow"
             android:layout_width="167dp"
             android:layout_height="50dp"
             android:layout_marginStart="2dp"

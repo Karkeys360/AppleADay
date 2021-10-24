@@ -5,6 +5,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +41,27 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         binding.addMealBtn.setOnClickListener(this::openAddFoodItemsActivity);
         binding.enterEventBtn.setOnClickListener(this::openEnterEvent);
+
+        binding.mealRow.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
+        binding.dateRow.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
+        binding.mealRow.setText("Food Item");
+        binding.dateRow.setText("Date");
+        binding.dateRow.setGravity(Gravity.CENTER);
+        binding.dateRow.setTextColor(Color.WHITE);
+        binding.mealRow.setGravity(Gravity.CENTER);
+        binding.mealRow.setTextColor(Color.WHITE);
+
+        binding.eventRow.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
+        binding.eventDateRow.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
+        binding.eventRow.setText("Event");
+        binding.eventDateRow.setText("Date");
+        binding.eventDateRow.setGravity(Gravity.CENTER);
+        binding.eventDateRow.setTextColor(Color.WHITE);
+        binding.eventRow.setGravity(Gravity.CENTER);
+        binding.eventRow.setTextColor(Color.WHITE);
+
         View root = binding.getRoot();
+
         return root;
     }
 
