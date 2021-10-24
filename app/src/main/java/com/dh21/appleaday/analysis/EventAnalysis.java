@@ -10,9 +10,11 @@ import com.dh21.appleaday.data.Food;
 import com.dh21.appleaday.data.Timed;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 // Singleton class
 public class EventAnalysis {
@@ -43,6 +45,14 @@ public class EventAnalysis {
 
     public static EventAnalysis getInstance() {
         return instance;
+    }
+
+    public Map<String, Integer> getFoodFreq() {
+        return Collections.unmodifiableMap(foodFreq);
+    }
+
+    public Map<String, Integer> getEventFreq() {
+        return Collections.unmodifiableMap(eventFreq);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

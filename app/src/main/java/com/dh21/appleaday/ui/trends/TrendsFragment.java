@@ -2,16 +2,20 @@ package com.dh21.appleaday.ui.trends;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -35,15 +39,22 @@ import java.time.format.TextStyle;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import static com.dh21.appleaday.data.IntervalIterator.Interval;
 
 public class TrendsFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+
+    private static final int NUM_EVENT_SENSITIVITIES = 4;
+    private static final double SENSITIVITY_THRESHOLD = 0.4;
 
     private TrendsViewModel dashboardViewModel;
     private FragmentTrendsBinding binding;
@@ -64,9 +75,87 @@ public class TrendsFragment extends Fragment implements AdapterView.OnItemSelect
         intervalSpinner.setAdapter(adapter);
         intervalSpinner.setOnItemSelectedListener(this);
 
-        generateGraphs(Interval.Day);
-
         return root;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        int i = binding.intervalSpinner.getSelectedItemPosition();
+        generateGraphs(Interval.values()[i]);
+        generateSensitivities();
+    }
+
+    private View createRow(String event, String food, double sensitivity) {
+        sensitivity = Math.random();
+        ConstraintLayout layout = new ConstraintLayout(requireActivity());
+        layout.setId(View.generateViewId());
+        layout.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        ConstraintSet cs = new ConstraintSet();
+        cs.clone(layout);
+
+        TextView eventText = new TextView(requireActivity());
+        eventText.setId(View.generateViewId());
+        eventText.setText(event);
+
+        ProgressBar pbar = new ProgressBar(requireActivity(), null,
+                android.R.attr.progressBarStyleHorizontal);
+        pbar.setId(View.generateViewId());
+        pbar.setIndeterminate(false);
+        pbar.setProgress((int) Math.round(Math.min(1, sensitivity) * 100.0));
+
+        TextView foodText = new TextView(requireActivity());
+        foodText.setId(View.generateViewId());
+        foodText.setText(food);
+
+
+
+        Log.d("Trends", String.format("Ids: %s", Arrays.toString(new int[]{eventText.getId(), pbar.getId(), foodText.getId()})));
+
+        layout.addView(eventText);
+        cs.connect(eventText.getId(), ConstraintSet.START, layout.getId(), ConstraintSet.START);
+        cs.connect(eventText.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP);
+        layout.addView(foodText);
+        cs.connect(foodText.getId(), ConstraintSet.END, layout.getId(), ConstraintSet.END);
+        cs.connect(foodText.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP);
+        layout.addView(pbar);
+        cs.connect(pbar.getId(), ConstraintSet.START, eventText.getId(), ConstraintSet.END);
+        cs.connect(pbar.getId(), ConstraintSet.END, foodText.getId(), ConstraintSet.START);
+        cs.connect(pbar.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP);
+
+        cs.applyTo(layout);
+
+        return layout;
+    }
+
+    private void generateSensitivities() {
+        EventAnalysis ea = EventAnalysis.getInstance();
+        Map<String, Integer> eventFreq = ea.getEventFreq();
+        Set<String> foodFreq = ea.getFoodFreq().keySet();
+
+        Log.d("Trends", "Gen!");
+
+        List<String> events = eventFreq.keySet().stream()
+                .sorted(Comparator.comparing(eventFreq::get).reversed())
+                .collect(Collectors.toList());
+
+        LinearLayout layout = binding.sensitivityList;
+        layout.removeAllViews();
+
+        for (String event : events) {
+            String sensitiveFood = foodFreq.stream()
+                    .max(Comparator.comparing(f -> ea.getEventGivenFoodProbability(event, f)))
+                    .orElse(null);
+            if (sensitiveFood != null) {
+                double sensitivity = ea.getEventGivenFoodProbability(event, sensitiveFood);
+                Log.d("Trends", String.format("Event=%s, Food=%s, sensitivity=%.3f", event, sensitiveFood, sensitivity));
+                if (sensitivity >= SENSITIVITY_THRESHOLD) {
+                    View row = createRow(event, sensitiveFood, sensitivity);
+                    layout.addView(row);
+                }
+            }
+        }
     }
 
     private void generateGraphs(Interval interval) {
