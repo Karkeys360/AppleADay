@@ -8,12 +8,12 @@
 
     <Button
         android:id="@+id/button100"
-        android:layout_width="180dp"
-        android:layout_height="100dp"
+        android:layout_width="170dp"
+        android:layout_height="80dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/roundedbutton"
-        android:text="MEALS"
+        android:text="Meals"
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -22,12 +22,12 @@
 
     <Button
         android:id="@+id/button101"
-        android:layout_width="180dp"
-        android:layout_height="100dp"
+        android:layout_width="170dp"
+        android:layout_height="80dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/roundedbutton"
-        android:text="EVENTS"
+        android:text="Events"
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -53,8 +53,8 @@
             android:layout_rowSpan="0"
             android:layout_column="0"
             android:layout_columnSpan="1"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="12dp"
             android:layout_marginBottom="200dp"
             android:background="@drawable/scroll_box"
             app:layout_constraintHorizontal_bias="0.5">

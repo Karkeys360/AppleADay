@@ -11,6 +11,7 @@ import com.dh21.appleaday.data.MockDataGenerator;
 import com.dh21.appleaday.data.Timed;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -46,6 +47,14 @@ public class EventAnalysis {
 
     public static EventAnalysis getInstance() {
         return instance;
+    }
+
+    public Map<String, Integer> getFoodFreq() {
+        return Collections.unmodifiableMap(foodFreq);
+    }
+
+    public Map<String, Integer> getEventFreq() {
+        return Collections.unmodifiableMap(eventFreq);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
