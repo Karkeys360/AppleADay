@@ -1,13 +1,13 @@
 package com.dh21.appleaday;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 import com.dh21.appleaday.data.Food;
 import com.google.gson.Gson;
 
 
 public class ParseFoodFacts {
-    public static String fullJson;
     public static Map<String, Double> grades = new HashMap<>();
 
     static {
@@ -18,18 +18,21 @@ public class ParseFoodFacts {
         grades.put("e", 4.0);
     }
 
+    public static void getFoodFacts(String barcode, CompletableFuture<Food> callback) {
+        CompletableFuture<String> future = new CompletableFuture<>();
+        future.thenApply(ParseFoodFacts::parseFood).thenAccept(callback::complete);
+        HttpQuery.getFoodFactsAsync(barcode, future);
+    }
 
-    public static Food getFoodFacts(String barcode) {
-        fullJson = HttpQuery.getFoodFacts(barcode);
-
+    public static Food parseFood(String json) {
         Gson parser = new Gson();
-        Map map = parser.fromJson(fullJson, Map.class);
+        Map map = parser.fromJson(json, Map.class);
         Map product = (Map) map.get("product");
         String name = (String) product.get("product_name");
         Set<String> ing = getIngredients(product);
         String grade = (String) product.get("nutriscore_grade");
         Map nutrients = (Map) product.get("nutriments");
-        double Calories = getNutrient(nutrients, "energy-kcal_serving");
+        double calories = getNutrient(nutrients, "energy-kcal_serving");
 
         double fats = getNutrient(nutrients, "fat_serving");
 
@@ -43,13 +46,12 @@ public class ParseFoodFacts {
 
         double carbs = getNutrient(nutrients, "carbohydrates_serving");
 
-
-        return new Food(name, grades.get(grade), Calories, fats, carbs,
+        return new Food(name, grades.getOrDefault(grade, -1.0), calories, fats, carbs,
                 protein, sugars, fiber, sodium, ing);
     }
 
     public static Double getNutrient(Map nutrients, String data) {
-        return (double) (nutrients.get(data) != null ? nutrients.get(data) : -1);
+        return (double) (nutrients.get(data) != null ? nutrients.get(data) : -1.0);
     }
 
     public static Set<String> getIngredients(Map product) {
