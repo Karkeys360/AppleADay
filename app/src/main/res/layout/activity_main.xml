@@ -30,7 +30,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/mobile_navigation" />
 
-<<<<<<< HEAD
     <Button
         android:id="@+id/button8"
         android:layout_width="350dp"
@@ -165,7 +164,5 @@
 
     </GridLayout>
 
-=======
->>>>>>> 4b2629ba862ae0f546811e40a6d7bc4248f39bb5
 
 </androidx.constraintlayout.widget.ConstraintLayout>
