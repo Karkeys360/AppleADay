@@ -23,6 +23,10 @@ public class IntervalIterator {
     }
 
     public List<Timed> next() {
+        if (this.index == -1) {
+            return null;
+        }
+
         int endIndex = this.index;
         int startIndex = this.index;
 
@@ -70,6 +74,7 @@ public class IntervalIterator {
                 }
                 break;
         }
+        this.index = startIndex;
         return times.subList(startIndex + 1, endIndex + 1);
     }
 
