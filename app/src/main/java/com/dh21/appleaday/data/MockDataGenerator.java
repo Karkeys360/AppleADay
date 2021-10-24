@@ -136,6 +136,6 @@ public class MockDataGenerator {
             }
         }
         EventAnalysis ea = EventAnalysis.getInstance();
-        ea.addAll(times);
+        ea.addTimes(times);
     }
 }
