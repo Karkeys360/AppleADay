@@ -55,7 +55,6 @@ public class EventAnalysis {
             this.eventFreq.put(name, eventFreq.getOrDefault(name, 0) + 1);
 
             // update foodEventsCaused
-            System.out.println("foodEventsCaused " + this.foodEventsCaused);
             int intervalLengthMillis = INTERVAL_LENGTH_DAYS * HOURS_PER_DAY * SECONDS_PER_HOUR * MILLIS_PER_SECOND;
             List<Timed> intervalTimes = DataUtil.getInterval(this.times, event.getTime() - intervalLengthMillis, event.getTime());
 
@@ -68,7 +67,6 @@ public class EventAnalysis {
                     foodEventsCaused.put(food.getName(), foodEvents);
                 }
             }
-            System.out.println("foodEventsCaused " + this.foodEventsCaused);
         }
         if (time instanceof Food) {
             this.numFoods++;
