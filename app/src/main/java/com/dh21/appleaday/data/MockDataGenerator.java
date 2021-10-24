@@ -28,7 +28,7 @@ public class MockDataGenerator {
         for (int i = 0; i < DAYS_IN_MONTH; i++) {
             for (int j = 0; j < MEALS_IN_DAY; j++) {
                 long time = MILLIS_OF_FIRST_MEAL + i * MILLIS_IN_DAY + j * MILLIS_BETWEEN_MEALS;
-                int foodAmount = rand.nextInt(3);
+                int foodAmount = 1;
                 boolean hasDiarrhea = false;
                 boolean hasFlatulence = false;
                 boolean hasBloating = false;
