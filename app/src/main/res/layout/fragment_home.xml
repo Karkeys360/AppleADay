@@ -19,8 +19,8 @@
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_constraintHorizontal_bias="0.5" />
 
@@ -30,19 +30,19 @@
         android:layout_height="45dp"
         android:layout_marginTop="400dp"
         android:background="@drawable/roundedbutton"
+        android:onClick="openEnterEvent"
         android:padding="5dp"
         android:text="@string/add_event"
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:onClick="openEnterEvent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <GridLayout
-        android:id="@+id/mealsTable"
+        android:id="@+id/meals"
         android:layout_width="wrap_content"
         android:layout_height="220dp"
         android:layout_marginTop="170dp"
@@ -60,8 +60,7 @@
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:background="@drawable/pill_button_right"
 
-            app:layout_constraintStart_toStartOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent" />
 
 
         <TextView
@@ -88,11 +87,17 @@
             android:background="@drawable/scroll_box">
 
             <LinearLayout
+                android:id="@+id/scrollList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:orientation="vertical" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.gridlayout.widget.GridLayout
+                    android:id="@+id/mealsTable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:columnCount="2" />
+            </LinearLayout>
         </ScrollView>
 
     </GridLayout>
@@ -137,11 +142,17 @@
             android:background="@drawable/scroll_box">
 
             <LinearLayout
+                android:id="@+id/scroller"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:orientation="vertical" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.gridlayout.widget.GridLayout
+                    android:id="@+id/eventsTable"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:columnCount="2" />
+            </LinearLayout>
         </ScrollView>
 
 
