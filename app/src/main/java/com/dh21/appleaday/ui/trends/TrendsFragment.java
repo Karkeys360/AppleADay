@@ -13,8 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.dh21.appleaday.analysis.EventAnalysis;
 import com.dh21.appleaday.data.DataUtil;
+import com.dh21.appleaday.data.Food;
 import com.dh21.appleaday.data.IntervalIterator;
+import com.dh21.appleaday.data.MockDataGenerator;
+import com.dh21.appleaday.data.Timed;
 import com.dh21.appleaday.databinding.FragmentTrendsBinding;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
@@ -47,6 +51,8 @@ public class TrendsFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         dashboardViewModel = new ViewModelProvider(this).get(TrendsViewModel.class);
 
+        MockDataGenerator.generate();
+
         binding = FragmentTrendsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
@@ -58,7 +64,7 @@ public class TrendsFragment extends Fragment {
         String[] keys = {"calories", "fats", "carbs", "proteins", "sodium", "fiber", "sugars"};
 
         for (int i = 0; i < keys.length; i++) {
-            layout.addView(createChart(null, IntervalIterator.Interval.Week, keys[i], i == keys.length - 1));
+            layout.addView(createChart(new IntervalIterator(EventAnalysis.getInstance().getTimes(), IntervalIterator.Interval.Day), IntervalIterator.Interval.Day, keys[i], i == keys.length - 1));
         }
 
         return root;
@@ -81,12 +87,12 @@ public class TrendsFragment extends Fragment {
         LinearLayout.LayoutParams chartParams =
                 new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, dpToPixels(200));
-        chartParams.bottomMargin = dpToPixels(last ? 60 : 20);
+        chartParams.setMargins(dpToPixels(15), 0, dpToPixels(15), dpToPixels(last ? 0 : 20));
         chart.setLayoutParams(chartParams);
 
         LinearLayout.LayoutParams titleParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        titleParams.gravity = Gravity.CENTER;
+        titleParams.setMargins(dpToPixels(15), 0, 0, 0);
         title.setLayoutParams(titleParams);
 
         return layout;
@@ -138,19 +144,19 @@ public class TrendsFragment extends Fragment {
                              String key, boolean last) {
         String titleKey = key.substring(0, 1).toUpperCase() + key.substring(1);
         // TODO: uncomment when using the actual mock data
-        LinkedList<Entry> vals = new LinkedList<>(createCalorieData(interval));
-//        List<Timed> entries;
-//        while ((entries = iterator.next()) != null) {
-//            float val = 0;
-//            for (Timed entry : entries) {
-//                if (entry instanceof Food) {
-//                    Food food = (Food) entry;
-//                    //noinspection ConstantConditions
-//                    val += food.getMap().getOrDefault(key, 0.0);
-//                }
-//            }
-//            vals.addFirst(val);
-//        }
+        LinkedList<Entry> vals = new LinkedList<>();
+        List<Timed> entries;
+        while ((entries = iterator.next()) != null) {
+            float val = 0;
+            for (Timed entry : entries) {
+                if (entry instanceof Food) {
+                    Food food = (Food) entry;
+                    //noinspection ConstantConditions
+                    val += food.getMap().getOrDefault(key, 0.0);
+                }
+            }
+            vals.addFirst(new Entry(val, entries.get(0).getTime()));
+        }
         List<BarEntry> barEntries = new ArrayList<>(vals.size());
         TreeMap<Float, Long> entryMap = new TreeMap<>();
         int i = -vals.size() + 1;
