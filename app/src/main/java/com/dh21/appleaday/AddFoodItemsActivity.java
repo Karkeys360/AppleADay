@@ -69,9 +69,8 @@ public class AddFoodItemsActivity extends AppCompatActivity {
 
         if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(AddFoodItemsActivity.this, new String[]{Manifest.permission.CAMERA}, 0);
-        } else {
-            Toast.makeText(this, "Camera allowed!", Toast.LENGTH_SHORT).show();
         }
+
 
     }
 
