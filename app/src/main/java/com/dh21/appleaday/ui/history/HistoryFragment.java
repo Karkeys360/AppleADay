@@ -1,6 +1,5 @@
 package com.dh21.appleaday.ui.history;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -8,7 +7,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,15 +14,12 @@ import androidx.fragment.app.Fragment;
 import androidx.gridlayout.widget.GridLayout;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.dh21.appleaday.EventEditorActivity;
-import com.dh21.appleaday.FoodEditorActivity;
 import com.dh21.appleaday.R;
 import com.dh21.appleaday.analysis.EventAnalysis;
 import com.dh21.appleaday.data.Event;
 import com.dh21.appleaday.data.Food;
 import com.dh21.appleaday.data.Timed;
 import com.dh21.appleaday.databinding.FragmentHistoryBinding;
-import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -118,27 +113,12 @@ public class HistoryFragment extends Fragment {
         return (int) (dp * scale + 0.5f);
     }
 
-    private View.OnClickListener createEditClickListener(Timed obj) {
-        return v -> {
-            Class<?> dest = (obj instanceof Food) ? FoodEditorActivity.class :
-                    EventEditorActivity.class;
-            String json = new Gson().toJson(obj);
-            Intent intent = new Intent(getActivity(), dest);
-            intent.putExtra("event", json);
-            startActivity(intent);
-        };
-    }
-
     private void addRowToLayout(GridLayout gl, String name, long timestamp, int row, Timed obj) {
-        View.OnClickListener editClickListener = createEditClickListener(obj);
-
         TextView nameText = new TextView(requireContext());
         nameText.setText(titleCase(name));
         nameText.setGravity(Gravity.CENTER);
         nameText.setTextSize(TypedValue.COMPLEX_UNIT_SP, FONT_SIZE);
         nameText.setTextColor(FONT_COLOR);
-        nameText.setClickable(true);
-        nameText.setOnClickListener(editClickListener);
 
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mma MMM dd", Locale.US);
         String dateStr = sdf.format(new Date(timestamp));
@@ -147,8 +127,6 @@ public class HistoryFragment extends Fragment {
         dateText.setText(dateStr);
         dateText.setTextSize(TypedValue.COMPLEX_UNIT_SP, FONT_SIZE);
         dateText.setTextColor(FONT_COLOR);
-        dateText.setClickable(true);
-        dateText.setOnClickListener(editClickListener);
 
         gl.addView(nameText);
         gl.addView(dateText);
@@ -162,9 +140,6 @@ public class HistoryFragment extends Fragment {
         param.height = GridLayout.LayoutParams.WRAP_CONTENT;
         param.width = GridLayout.LayoutParams.WRAP_CONTENT;
         param.setMargins(0, dpToPixels(ROW_PADDING), 0, dpToPixels(ROW_PADDING));
-//        param.rightMargin = 5;
-//        param.topMargin = 5;
-//        param.setGravity(Gravity.CENTER);
         param.columnSpec = GridLayout.spec(c, 1f);
         param.rowSpec = GridLayout.spec(r);
         return param;
