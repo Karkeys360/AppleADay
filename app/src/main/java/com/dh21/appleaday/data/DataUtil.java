@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class Util {
+public class DataUtil {
 
     public static List<Timed> getInterval(List<Timed> times, long start, long end) {
         int startIndex = Collections.binarySearch(times, new TimedDummy(start), new Comparator<Timed>() {

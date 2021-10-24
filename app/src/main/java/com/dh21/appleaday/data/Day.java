@@ -24,4 +24,8 @@ public class Day {
         this.events.add(event);
     }
 
+    public List<Event> getEvents() {
+        return new ArrayList<>(events);
+    }
+
 }
