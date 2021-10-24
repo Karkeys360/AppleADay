@@ -32,7 +32,7 @@ public class ParseFoodFacts {
         Set<String> ing = getIngredients(product);
         String grade = (String) product.get("nutriscore_grade");
         Map nutrients = (Map) product.get("nutriments");
-        double Calories = getNutrient(nutrients, "energy-kcal_serving");
+        double calories = getNutrient(nutrients, "energy-kcal_serving");
 
         double fats = getNutrient(nutrients, "fat_serving");
 
@@ -46,13 +46,12 @@ public class ParseFoodFacts {
 
         double carbs = getNutrient(nutrients, "carbohydrates_serving");
 
-
-        return new Food(name, grades.get(grade), Calories, fats, carbs,
+        return new Food(name, grades.getOrDefault(grade, -1.0), calories, fats, carbs,
                 protein, sugars, fiber, sodium, ing);
     }
 
     public static Double getNutrient(Map nutrients, String data) {
-        return (double) (nutrients.get(data) != null ? nutrients.get(data) : -1);
+        return (double) (nutrients.get(data) != null ? nutrients.get(data) : -1.0);
     }
 
     public static Set<String> getIngredients(Map product) {

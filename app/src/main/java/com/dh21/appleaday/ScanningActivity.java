@@ -85,7 +85,11 @@ public class ScanningActivity extends AppCompatActivity {
             CompletableFuture<Food> foodCallback = new CompletableFuture<>();
             FoodScanner.scanBarcode(inputImage, foodCallback);
             return foodCallback;
-        }).thenAccept(this::handleResult);
+        }).thenAccept(this::handleResult).exceptionally(e -> {
+            e.printStackTrace();
+            Toast.makeText(this, "An error occurred while scanning!", Toast.LENGTH_LONG).show();
+            return null;
+        });
         imageCapture.takePicture(
                 ContextCompat.getMainExecutor(this), new ImageListener(imgCallback));
     }
