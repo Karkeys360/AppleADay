@@ -1,168 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/container"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:id="@+id/container"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+
+<com.google.android.material.bottomnavigation.BottomNavigationView
+    android:id="@+id/nav_view"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="0dp"
+    android:layout_marginEnd="0dp"
+    android:background="@color/navbar"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:menu="@menu/bottom_nav_menu" />
+
+<fragment
+    android:id="@+id/nav_host_fragment_activity_main"
+    android:name="androidx.navigation.fragment.NavHostFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:background="@color/navbar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
-
-    <fragment
-        android:id="@+id/nav_host_fragment_activity_main"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:defaultNavHost="true"
-        app:layout_constraintBottom_toTopOf="@+id/nav_view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/mobile_navigation" />
-
-    <Button
-        android:id="@+id/button8"
-        android:layout_width="350dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/roundedbutton"
-        android:padding="5dp"
-        android:text="Add Meal"
-        android:textColor="@color/colorPrimary"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:onClick="openAddFoodItemsActivity"
-
-        app:layout_constraintEnd_toStartOf="@+id/nav_host_fragment_activity_main"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/nav_host_fragment_activity_main"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <Button
-        android:id="@+id/button9"
-        android:layout_width="350dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="300dp"
-        android:background="@drawable/roundedbutton"
-        android:padding="5dp"
-        android:text="Add Event"
-        android:textColor="@color/colorPrimary"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:onClick="openEnterEvent"
-        app:layout_constraintEnd_toStartOf="@+id/nav_host_fragment_activity_main"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/nav_host_fragment_activity_main"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <GridLayout
-        android:id="@+id/table2"
-        android:layout_width="370dp"
-        android:layout_height="220dp"
-        android:layout_marginTop="70dp"
-        android:background="@drawable/data_display"
-        app:layout_constraintEnd_toStartOf="@+id/nav_host_fragment_activity_main"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/nav_host_fragment_activity_main"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TableRow
-            android:layout_width="167dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:background="@drawable/pill_button_right" />
-
-
-        <TableRow
-            android:layout_width="167dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="2dp"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:background="@drawable/pill_button_left" />
-
-        <ScrollView
-            android:layout_width="336dp"
-            android:layout_height="130dp"
-            android:layout_row="1"
-            android:layout_rowSpan="2"
-            android:layout_column="0"
-            android:layout_columnSpan="2"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:background="@drawable/scroll_box">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:orientation="vertical" />
-        </ScrollView>
-    </GridLayout>
-
-    <GridLayout
-        android:layout_width="370dp"
-        android:layout_height="220dp"
-        android:layout_marginTop="360dp"
-        android:background="@drawable/data_display"
-        app:layout_constraintEnd_toStartOf="@+id/nav_host_fragment_activity_main"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/nav_host_fragment_activity_main"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TableRow
-            android:layout_width="167dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:background="@drawable/pill_button_right" />
-
-
-        <TableRow
-            android:layout_width="167dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="2dp"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:background="@drawable/pill_button_left" />
-
-        <ScrollView
-            android:layout_width="336dp"
-            android:layout_height="130dp"
-            android:layout_row="1"
-            android:layout_rowSpan="2"
-            android:layout_column="0"
-            android:layout_columnSpan="2"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:background="@drawable/scroll_box">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:orientation="vertical" />
-        </ScrollView>
-
-
-    </GridLayout>
+    android:layout_height="0dp"
+    app:defaultNavHost="true"
+    app:layout_constraintBottom_toTopOf="@+id/nav_view"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.5"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:navGraph="@navigation/mobile_navigation" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

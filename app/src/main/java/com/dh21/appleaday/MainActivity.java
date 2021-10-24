@@ -9,7 +9,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -40,13 +39,4 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void openAddFoodItemsActivity(View view) {
-        Intent intent = new Intent(MainActivity.this, AddFoodItemsActivity.class);
-        startActivity(intent);
-    }
-
-    public void openEnterEvent(View view) {
-        DialogFragment fragment = new EnterEventDialog();
-        fragment.show(getSupportFragmentManager(), "enter_events");
-    }
 }
