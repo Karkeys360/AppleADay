@@ -1,5 +1,6 @@
 package com.dh21.appleaday.ui.history;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -15,12 +16,15 @@ import androidx.fragment.app.Fragment;
 import androidx.gridlayout.widget.GridLayout;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.dh21.appleaday.EventEditorActivity;
+import com.dh21.appleaday.FoodEditorActivity;
 import com.dh21.appleaday.R;
 import com.dh21.appleaday.analysis.EventAnalysis;
 import com.dh21.appleaday.data.Event;
 import com.dh21.appleaday.data.Food;
 import com.dh21.appleaday.data.Timed;
 import com.dh21.appleaday.databinding.FragmentHistoryBinding;
+import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -93,11 +97,11 @@ public class HistoryFragment extends Fragment {
             Timed t = timeds.get(i);
             if (display == Display.Event && t instanceof Event) {
                 Event e = (Event) t;
-                addRowToLayout(binding.contentGrid, e.getName(), e.getTime(), added);
+                addRowToLayout(binding.contentGrid, e.getName(), e.getTime(), added, t);
                 added++;
             } else if (display == Display.Food && t instanceof Food) {
                 Food f = (Food) t;
-                addRowToLayout(binding.contentGrid, f.getName(), f.getTime(), added);
+                addRowToLayout(binding.contentGrid, f.getName(), f.getTime(), added, t);
                 added++;
             }
         }
@@ -114,12 +118,27 @@ public class HistoryFragment extends Fragment {
         return (int) (dp * scale + 0.5f);
     }
 
-    private void addRowToLayout(GridLayout gl, String name, long timestamp, int row) {
+    private View.OnClickListener createEditClickListener(Timed obj) {
+        return v -> {
+            Class<?> dest = (obj instanceof Food) ? FoodEditorActivity.class :
+                    EventEditorActivity.class;
+            String json = new Gson().toJson(obj);
+            Intent intent = new Intent(getActivity(), dest);
+            intent.putExtra("event", json);
+            startActivity(intent);
+        };
+    }
+
+    private void addRowToLayout(GridLayout gl, String name, long timestamp, int row, Timed obj) {
+        View.OnClickListener editClickListener = createEditClickListener(obj);
+
         TextView nameText = new TextView(requireContext());
         nameText.setText(titleCase(name));
         nameText.setGravity(Gravity.CENTER);
         nameText.setTextSize(TypedValue.COMPLEX_UNIT_SP, FONT_SIZE);
         nameText.setTextColor(FONT_COLOR);
+        nameText.setClickable(true);
+        nameText.setOnClickListener(editClickListener);
 
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mma MMM dd", Locale.US);
         String dateStr = sdf.format(new Date(timestamp));
@@ -128,6 +147,8 @@ public class HistoryFragment extends Fragment {
         dateText.setText(dateStr);
         dateText.setTextSize(TypedValue.COMPLEX_UNIT_SP, FONT_SIZE);
         dateText.setTextColor(FONT_COLOR);
+        dateText.setClickable(true);
+        dateText.setOnClickListener(editClickListener);
 
         gl.addView(nameText);
         gl.addView(dateText);

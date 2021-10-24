@@ -2,6 +2,7 @@ package com.dh21.appleaday.data;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -170,5 +171,27 @@ public class Food implements Timed {
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Food food = (Food) o;
+        return time == food.time &&
+                Double.compare(food.grade, grade) == 0 &&
+                Double.compare(food.calories, calories) == 0 &&
+                Double.compare(food.fats, fats) == 0 &&
+                Double.compare(food.carbs, carbs) == 0 &&
+                Double.compare(food.proteins, proteins) == 0 &&
+                Double.compare(food.sugars, sugars) == 0 &&
+                Double.compare(food.fiber, fiber) == 0 &&
+                Double.compare(food.sodium, sodium) == 0 &&
+                name.equals(food.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, time, grade, calories, fats, carbs, proteins, sugars, fiber, sodium);
     }
 }
