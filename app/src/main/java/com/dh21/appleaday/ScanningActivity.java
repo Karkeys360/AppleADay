@@ -1,6 +1,8 @@
 package com.dh21.appleaday;
 
+import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
@@ -14,6 +16,7 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.Image;
@@ -28,6 +31,7 @@ import android.widget.Toast;
 import com.dh21.appleaday.barcode.FoodScanner;
 import com.dh21.appleaday.data.Food;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.gson.Gson;
 import com.google.mlkit.vision.common.InputImage;
 
 import java.util.concurrent.CompletableFuture;
@@ -45,7 +49,6 @@ public class ScanningActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(LOG_TAG, "hello!");
         setContentView(R.layout.activity_scanning);
         previewView = findViewById(R.id.previewView);
         scanButton = findViewById(R.id.scanButton);
@@ -76,17 +79,16 @@ public class ScanningActivity extends AppCompatActivity {
             throw new AssertionError("Assertion failed");
         }
 
-        CompletableFuture<ImageAndInfo> imgCallback = new CompletableFuture<>();
-        // TODO: handle failures
-        imgCallback.thenCompose(imageAndInfo -> {
-            Image image = imageAndInfo.image;
-            ImageInfo info = imageAndInfo.info;
-            InputImage inputImage = InputImage.fromMediaImage(image, info.getRotationDegrees());
+        scanButton.setEnabled(false);
+
+        CompletableFuture<ImageProxy> imgCallback = new CompletableFuture<>();
+        imgCallback.thenCompose(imageProxy -> {
             CompletableFuture<Food> foodCallback = new CompletableFuture<>();
-            FoodScanner.scanBarcode(inputImage, foodCallback);
+            FoodScanner.scanBarcode(imageProxy, foodCallback);
             return foodCallback;
         }).thenAccept(this::handleResult).exceptionally(e -> {
             e.printStackTrace();
+            scanButton.setEnabled(true);
             Toast.makeText(this, "An error occurred while scanning!", Toast.LENGTH_LONG).show();
             return null;
         });
@@ -95,13 +97,15 @@ public class ScanningActivity extends AppCompatActivity {
     }
 
     void handleResult(Food food) {
-        Log.d("Scanning_Activity", "Food: " + food.getName());
+        Log.d(LOG_TAG, "Food: " + food.getName());
+        Intent intent = new Intent();
+        intent.putExtra("food", new Gson().toJson(food));
+        setResult(0, intent);
         finish();
     }
 
     void bindAll() {
-        preview = new Preview.Builder()
-                .build();
+        preview = new Preview.Builder().build();
 
         CameraSelector cameraSelector = new CameraSelector.Builder()
                 .requireLensFacing(CameraSelector.LENS_FACING_BACK)
@@ -115,21 +119,11 @@ public class ScanningActivity extends AppCompatActivity {
         cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, imageCapture, preview);
     }
 
-    private static class ImageAndInfo {
-        private Image image;
-        private ImageInfo info;
-
-        public ImageAndInfo(Image image, ImageInfo info) {
-            this.image = image;
-            this.info = info;
-        }
-    }
-
     private static class ImageListener extends ImageCapture.OnImageCapturedCallback {
 
-        private CompletableFuture<ImageAndInfo> callback;
+        private CompletableFuture<ImageProxy> callback;
 
-        public ImageListener(CompletableFuture<ImageAndInfo> callback) {
+        public ImageListener(CompletableFuture<ImageProxy> callback) {
             this.callback = callback;
         }
 
@@ -140,13 +134,12 @@ public class ScanningActivity extends AppCompatActivity {
 
         @Override
         public void onCaptureSuccess(@NonNull ImageProxy imageProxy) {
-            Image image = imageProxy.getImage();
-            if (image == null) {
+            if (imageProxy.getImage() == null) {
                 callback.completeExceptionally(
                         new ImageCaptureException(
                                 ImageCapture.ERROR_CAPTURE_FAILED, "Capture failed!", null));
             } else {
-                callback.complete(new ImageAndInfo(image, imageProxy.getImageInfo()));
+                callback.complete(imageProxy);
             }
         }
     }
