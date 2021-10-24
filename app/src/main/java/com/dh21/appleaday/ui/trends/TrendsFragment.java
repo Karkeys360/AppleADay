@@ -1,4 +1,4 @@
-package com.dh21.appleaday.ui.dashboard;
+package com.dh21.appleaday.ui.trends;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,24 +11,22 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import com.dh21.appleaday.databinding.FragmentTrendsBinding;
 
-import com.dh21.appleaday.R;
-import com.dh21.appleaday.databinding.FragmentDashboardBinding;
+public class TrendsFragment extends Fragment {
 
-public class DashboardFragment extends Fragment {
-
-    private DashboardViewModel dashboardViewModel;
-    private FragmentDashboardBinding binding;
+    private com.dh21.appleaday.ui.trends.TrendsViewModel dashboardViewModel;
+    private FragmentTrendsBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel.class);
+                new ViewModelProvider(this).get(com.dh21.appleaday.ui.trends.TrendsViewModel.class);
 
-        binding = FragmentDashboardBinding.inflate(inflater, container, false);
+        binding = FragmentTrendsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textDashboard;
+        final TextView textView = binding.textTrends;
         dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
