@@ -26,6 +26,7 @@ import android.view.Display;
 import android.view.Surface;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.dh21.appleaday.barcode.FoodScanner;
@@ -45,6 +46,7 @@ public class ScanningActivity extends AppCompatActivity {
     private Preview preview;
     private ImageCapture imageCapture;
     private Button scanButton;
+    private ProgressBar loadingCircle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class ScanningActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scanning);
         previewView = findViewById(R.id.previewView);
         scanButton = findViewById(R.id.scanButton);
+        loadingCircle = findViewById(R.id.loadingCircle);
 
         scanButton.setOnClickListener(this::scanButtonClicked);
 
@@ -80,6 +83,7 @@ public class ScanningActivity extends AppCompatActivity {
         }
 
         scanButton.setEnabled(false);
+        loadingCircle.setVisibility(View.VISIBLE);
 
         CompletableFuture<ImageProxy> imgCallback = new CompletableFuture<>();
         imgCallback.thenCompose(imageProxy -> {
@@ -89,6 +93,7 @@ public class ScanningActivity extends AppCompatActivity {
         }).thenAccept(this::handleResult).exceptionally(e -> {
             e.printStackTrace();
             scanButton.setEnabled(true);
+            loadingCircle.setVisibility(View.INVISIBLE);
             Toast.makeText(this, "An error occurred while scanning!", Toast.LENGTH_LONG).show();
             return null;
         });
