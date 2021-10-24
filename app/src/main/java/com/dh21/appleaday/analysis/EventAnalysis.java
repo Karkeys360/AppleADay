@@ -86,7 +86,7 @@ public class EventAnalysis {
     }
 
     public List<Timed> getTimes() {
-        return new ArrayList<>(this.times);
+        return this.times;
     }
 
     public double getEventProbability(String eventName) {
