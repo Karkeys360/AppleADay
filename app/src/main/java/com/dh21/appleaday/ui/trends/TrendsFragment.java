@@ -27,6 +27,7 @@ import com.dh21.appleaday.data.IntervalIterator;
 import com.dh21.appleaday.data.Timed;
 import com.dh21.appleaday.databinding.FragmentTrendsBinding;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -90,7 +91,10 @@ public class TrendsFragment extends Fragment implements AdapterView.OnItemSelect
     private View createSensitivityRow(String event, String food, double sensitivity) {
         ConstraintLayout layout = new ConstraintLayout(requireActivity());
         layout.setId(View.generateViewId());
-        layout.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(dpToPixels(10), dpToPixels(5), dpToPixels(10), dpToPixels(5));
+        layout.setLayoutParams(layoutParams);
 
         ConstraintSet cs = new ConstraintSet();
 
@@ -107,7 +111,7 @@ public class TrendsFragment extends Fragment implements AdapterView.OnItemSelect
         pbar.setId(View.generateViewId());
         pbar.setIndeterminate(false);
         pbar.setLayoutParams(pbarParams);
-        pbar.setProgress((int) Math.round(Math.min(1, sensitivity) * 100.0));
+        pbar.setProgress((int) Math.round(Math.min(1, Math.max(0, sensitivity)) * 100.0));
 
         ConstraintLayout.LayoutParams foodParams = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         foodParams.width = dpToPixels(90);
@@ -124,9 +128,9 @@ public class TrendsFragment extends Fragment implements AdapterView.OnItemSelect
         cs.clone(layout);
         Log.d("Trends", String.format("Ids: %s", Arrays.toString(new int[]{eventText.getId(), pbar.getId(), foodText.getId()})));
 
-        cs.connect(eventText.getId(), ConstraintSet.START, layout.getId(), ConstraintSet.START, dpToPixels(15));
+        cs.connect(eventText.getId(), ConstraintSet.START, layout.getId(), ConstraintSet.START);
         cs.connect(eventText.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP);
-        cs.connect(foodText.getId(), ConstraintSet.END, layout.getId(), ConstraintSet.END, dpToPixels(15));
+        cs.connect(foodText.getId(), ConstraintSet.END, layout.getId(), ConstraintSet.END);
         cs.connect(foodText.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP);
         cs.connect(pbar.getId(), ConstraintSet.START, eventText.getId(), ConstraintSet.END);
         cs.connect(pbar.getId(), ConstraintSet.END, foodText.getId(), ConstraintSet.START);
@@ -277,7 +281,9 @@ public class TrendsFragment extends Fragment implements AdapterView.OnItemSelect
         BarData data = new BarData(new BarDataSet(barEntries, titleKey));
         BarChart chart = new BarChart(ctx);
         chart.setData(data);
-        chart.setDescription(null);
+        Description d = new Description();
+        d.setText("");
+        chart.setDescription(d);
         chart.moveViewToX(0);
         chart.getXAxis().setDrawLabels(true);
         chart.getXAxis().setValueFormatter(createDateVF(entryMap, interval));
