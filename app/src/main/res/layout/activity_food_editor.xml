@@ -221,8 +221,8 @@
         android:id="@+id/textView13"
         android:layout_width="390dp"
         android:layout_height="30dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="490dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="476dp"
         android:background="@drawable/roundedbutton"
         android:gravity="center"
         android:text="Date:"
@@ -247,10 +247,10 @@
 
     <CalendarView
         android:id="@+id/calendarView200"
-        android:layout_width="190dp"
-        android:layout_height="190dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="530dp"
+        android:layout_width="195dp"
+        android:layout_height="221dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="504dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -258,9 +258,20 @@
         android:id="@+id/simpleTimePicker200"
         android:layout_width="190dp"
         android:layout_height="110dp"
-        android:layout_marginStart="210dp"
-        android:layout_marginTop="560dp"
+        android:layout_marginStart="208dp"
+        android:layout_marginTop="528dp"
         android:timePickerMode="spinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/DeleteFoodButton"
+        android:layout_width="179dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="212dp"
+        android:layout_marginTop="645dp"
+        android:text="Delete Food"
+        android:background="@drawable/roundedbutton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

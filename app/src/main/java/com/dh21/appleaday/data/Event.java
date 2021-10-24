@@ -1,5 +1,7 @@
 package com.dh21.appleaday.data;
 
+import java.util.Objects;
+
 public class Event implements Timed {
 
     private String name;
@@ -42,4 +44,17 @@ public class Event implements Timed {
         this.severity = severity;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event = (Event) o;
+        return time == event.time &&
+                name.equals(event.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, time);
+    }
 }
