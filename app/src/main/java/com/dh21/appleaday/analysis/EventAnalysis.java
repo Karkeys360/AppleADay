@@ -11,8 +11,10 @@ import com.dh21.appleaday.data.Timed;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 // Singleton class
 public class EventAnalysis {
@@ -58,9 +60,14 @@ public class EventAnalysis {
             int intervalLengthMillis = INTERVAL_LENGTH_DAYS * HOURS_PER_DAY * SECONDS_PER_HOUR * MILLIS_PER_SECOND;
             List<Timed> intervalTimes = DataUtil.getInterval(this.times, event.getTime() - intervalLengthMillis, event.getTime());
 
+            Set<String> foodNames = new HashSet<>();
             for (Timed intervalTime : intervalTimes) {
                 if (intervalTime instanceof Food) {
                     Food food = (Food) intervalTime;
+                    if (foodNames.contains(food.getName())) {
+                        continue;
+                    }
+                    foodNames.add(food.getName());
 
                     Map<String, Integer> foodEvents = foodEventsCaused.getOrDefault(food.getName(), new HashMap<String, Integer>());
                     foodEvents.put(event.getName(), foodEvents.getOrDefault(event.getName(), 0) + 1);
