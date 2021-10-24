@@ -38,7 +38,7 @@ public class AddFoodItemsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_food_items);
         openScanner = findViewById(R.id.openScanner);
 
-        TextView tv = findViewById(R.id.item1);
+        TextView tv = findViewById(R.id.tv1);
         tv.setText("Items: ");
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
 

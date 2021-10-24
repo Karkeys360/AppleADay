@@ -32,25 +32,62 @@
         app:layout_constraintStart_toEndOf="@+id/nav_host_fragment_activity_main"
         app:layout_constraintTop_toTopOf="parent"
         />
-    <TextView
-        android:id="@+id/item1"
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
-    <TextView
-        android:id="@+id/item2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
-    <TextView
-        android:id="@+id/item3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
-    <TextView
-        android:id="@+id/item4"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/scroll_box"
+        app:layout_constraintHorizontal_bias="0.5">
+
+        <LinearLayout
+            android:id="@+id/scrollList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.gridlayout.widget.GridLayout
+                android:id="@+id/addFoodGL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:columnCount="2">
+
+                <TextView
+                    android:id="@+id/tv1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    app:layout_column="0"
+                    app:layout_columnWeight="1"
+                    app:layout_row="0" />
+
+                <TextView
+                    android:id="@+id/tv2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    app:layout_column="1"
+                    app:layout_columnWeight="1"
+                    app:layout_row="0" />
+
+                <TextView
+                    android:id="@+id/tv3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    app:layout_columnWeight="1" />
+
+                <TextView
+                    android:id="@+id/tv4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    app:layout_columnWeight="1" />
+            </androidx.gridlayout.widget.GridLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
