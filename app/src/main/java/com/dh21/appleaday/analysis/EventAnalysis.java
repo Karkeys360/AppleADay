@@ -1,12 +1,18 @@
 package com.dh21.appleaday.analysis;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.dh21.appleaday.data.DataUtil;
 import com.dh21.appleaday.data.Event;
 import com.dh21.appleaday.data.Food;
 import com.dh21.appleaday.data.Timed;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // Singleton class
 public class EventAnalysis {
@@ -17,35 +23,80 @@ public class EventAnalysis {
 
     private static boolean DEBUG = true;
 
-    private static EventAnalysis instance = new EventAnalysis(new ArrayList<Timed>());
+    private static EventAnalysis instance = new EventAnalysis();
     private List<Timed> times;
 
-    private EventAnalysis(List<Timed> times) {
-        this.times = times;
+    private int numEvents; // total num of events
+    private int numFoods; // total num of foods
+    private Map<String, Integer> eventFreq; // frequency of events by name
+    private Map<String, Integer> foodFreq; // frequency of foods by name
+    private Map<String, Map<String, Integer>> foodEventsCaused; // frequency of events caused by food by food name
+
+    private EventAnalysis() {
+        this.numEvents = 0;
+        this.numFoods = 0;
+        this.times = new ArrayList<>();
+        this.eventFreq = new HashMap<>();
+        this.foodFreq = new HashMap<>();
+        this.foodEventsCaused = new HashMap<>();
     }
 
     public static EventAnalysis getInstance() {
         return instance;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void addTime(Timed time) {
         this.times.add(time);
+        if (time instanceof Event) {
+            this.numEvents++;
+            Event event = (Event) time;
+            String name = event.getName();
+            this.eventFreq.put(name, eventFreq.getOrDefault(name, 0) + 1);
+
+            // update foodEventsCaused
+            int intervalLengthMillis = INTERVAL_LENGTH_DAYS * HOURS_PER_DAY * SECONDS_PER_HOUR * MILLIS_PER_SECOND;
+            List<Timed> intervalTimes = DataUtil.getInterval(this.times, event.getTime() - intervalLengthMillis, event.getTime());
+
+            for (Timed intervalTime : intervalTimes) {
+                if (intervalTime instanceof Food) {
+                    Food food = (Food) intervalTime;
+
+                    Map<String, Integer> foodEvents = foodEventsCaused.getOrDefault(food.getName(), new HashMap<String, Integer>());
+                    foodEvents.put(event.getName(), foodEvents.getOrDefault(event.getName(), 0) + 1);
+                    foodEventsCaused.put(food.getName(), foodEvents);
+                }
+            }
+        }
+        if (time instanceof Food) {
+            this.numFoods++;
+            Food food = (Food) time;
+            String name = food.getName();
+            foodFreq.put(name, foodFreq.getOrDefault(name, 0) + 1);
+        }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void addTimes(List<Timed> times) {
-        this.times.addAll(times);
+        for (Timed time : times) {
+            this.addTime(time);
+        }
+    }
+
+    public List<Timed> getTimes() {
+        return this.times;
     }
 
     public double getEventProbability(String eventName) {
-        return 1.0 * getNumEventsWithName(eventName) / getTotalEvents();
+        return (double) getNumEventsWithName(eventName) / getTotalEvents();
     }
 
     public double getFoodProbability(String foodName) {
-        return 1.0 * getNumFoodsWithName(foodName) / getTotalFoods();
+        return (double) getNumFoodsWithName(foodName) / getTotalFoods();
     }
 
     public int getNumEventsWithName(String eventName) {
-        return getNumEventsWithName(this.times, eventName);
+        return this.eventFreq.get(eventName);
     }
 
     private int getNumEventsWithName(List<Timed> times, String eventName) {
@@ -62,7 +113,7 @@ public class EventAnalysis {
     }
 
     public int getNumFoodsWithName(String foodName) {
-        return getNumFoodsWithName(this.times, foodName);
+        return this.foodFreq.get(foodName);
     }
 
     private int getNumFoodsWithName(List<Timed> times, String foodName) {
@@ -79,55 +130,30 @@ public class EventAnalysis {
     }
 
     public int getTotalEvents() {
-        int numEvents = 0;
-        for (Timed time : this.times) {
-            if (time instanceof Event) {
-                Event event = (Event) time;
-                numEvents++;
-            }
-        }
-        return numEvents;
+        return this.numEvents;
     }
 
     public int getTotalFoods() {
-        int numFoods = 0;
-        for (Timed time : this.times) {
-            if (time instanceof Food) {
-                Food food = (Food) time;
-                numFoods++;
-            }
-        }
-        return numFoods;
+        return this.numFoods;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public double getFoodGivenEventProbability(String foodName, String eventName) {
-        return 1.0 * getNumEventsCausedByFood(foodName, eventName) / getNumEventsWithName(eventName);
+        return (double) getNumEventsCausedByFood(foodName, eventName) / getNumEventsWithName(eventName);
     }
 
-    // Computes sensitivity using Bayes Theorem
+    // Computes sensitivity
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public double getEventGivenFoodProbability(String eventName, String foodName) {
-        return 1.0 * getNumEventsCausedByFood(foodName, eventName) / getNumFoodsWithName(foodName);
+        return (double) getNumEventsCausedByFood(foodName, eventName) / getNumFoodsWithName(foodName);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public int getNumEventsCausedByFood(String foodName, String eventName) {
-        // number of intervals in which food with `foodName` was eaten and event with `eventName` happened
-        int cnt = 0;
-
-        int intervalLengthMillis = INTERVAL_LENGTH_DAYS * HOURS_PER_DAY * SECONDS_PER_HOUR * MILLIS_PER_SECOND;
-        for (Timed time : times) {
-            if (time instanceof Food) {
-                Food food = (Food) time;
-
-                // check how many events this food may have caused
-                if (food.getName().equals(foodName)) {
-                    List<Timed> interval = DataUtil.getInterval(times, food.getTime(), food.getTime() + intervalLengthMillis);
-                    cnt += getNumEventsWithName(interval, eventName);
-                }
-            }
-        }
-        return cnt;
+        return this.foodEventsCaused.getOrDefault(foodName, new HashMap<String, Integer>()).getOrDefault(eventName, 0);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static void main(String[] args) {
         if (DEBUG) {
             // testing
