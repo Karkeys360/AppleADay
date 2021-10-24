@@ -102,7 +102,7 @@ public class TrendsFragment extends Fragment implements AdapterView.OnItemSelect
         eventParams.width = dpToPixels(90);
         TextView eventText = new TextView(requireActivity());
         eventText.setId(View.generateViewId());
-        eventText.setText(event);
+        eventText.setText(titleCase(event));
         eventText.setLayoutParams(eventParams);
 
         ProgressBar pbar = new ProgressBar(requireActivity(), null,
@@ -118,7 +118,7 @@ public class TrendsFragment extends Fragment implements AdapterView.OnItemSelect
         TextView foodText = new TextView(requireActivity());
         foodText.setGravity(Gravity.RIGHT);
         foodText.setId(View.generateViewId());
-        foodText.setText(food);
+        foodText.setText(titleCase(food));
         foodText.setLayoutParams(foodParams);
 
 
@@ -139,6 +139,12 @@ public class TrendsFragment extends Fragment implements AdapterView.OnItemSelect
         cs.applyTo(layout);
 
         return layout;
+    }
+
+    private String titleCase(String str) {
+        return Arrays.stream(str.split("\\s"))
+                .map(s -> s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase())
+                .collect(Collectors.joining(" "));
     }
 
     private void generateSensitivities() {

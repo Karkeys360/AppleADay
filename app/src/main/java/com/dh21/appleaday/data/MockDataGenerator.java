@@ -2,6 +2,9 @@ package com.dh21.appleaday.data;
 
 import com.dh21.appleaday.analysis.EventAnalysis;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,9 +17,12 @@ public class MockDataGenerator {
     public static final long MILLIS_IN_DAY = 86400000;
     public static final long MILLIS_BETWEEN_MEALS = 9000000;  // 2.5 hours
     public static final long MILLIS_TILL_EVENT = 7200000;  // 2 hours
-    public static final long MILLIS_OF_FIRST_MEAL = 1577901600000L;  // 1/1/2020 11 AM PST
 
     public static void generate () {
+        LocalDate dataEnd = LocalDate.now();
+        LocalDate dataStart = dataEnd.minusDays(DAYS_TO_GENERATE);
+        LocalDateTime startTime = dataStart.atTime(11, 0); // 11 AM
+        long firstMealMillis = startTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 
         // diarrhea - burrito
         // flatulence - milk
@@ -27,7 +33,7 @@ public class MockDataGenerator {
         List<Timed> times = new ArrayList<>();
         for (int i = 0; i < DAYS_TO_GENERATE; i++) {
             for (int j = 0; j < MEALS_IN_DAY; j++) {
-                long time = MILLIS_OF_FIRST_MEAL + i * MILLIS_IN_DAY + j * MILLIS_BETWEEN_MEALS;
+                long time = firstMealMillis + i * MILLIS_IN_DAY + j * MILLIS_BETWEEN_MEALS;
                 int foodAmount = rand.nextInt(2) + 1;
                 boolean hasDiarrhea = false;
                 boolean hasFlatulence = false;
