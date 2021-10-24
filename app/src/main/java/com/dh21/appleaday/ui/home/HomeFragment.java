@@ -1,5 +1,6 @@
 package com.dh21.appleaday.ui.home;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dh21.appleaday.R;
 import com.dh21.appleaday.databinding.FragmentHomeBinding;
+
+import java.util.Objects;
 
 public class HomeFragment extends Fragment {
 
