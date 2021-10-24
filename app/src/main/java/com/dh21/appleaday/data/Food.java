@@ -14,6 +14,9 @@ public class Food implements Timed {
     private double fats;
     private double carbs;
     private double proteins;
+    private double sugars;
+    private double fiber;
+    private double sodium;
     private Set<String> ingredients;
 
     public Food(String name) {
@@ -24,27 +27,53 @@ public class Food implements Timed {
         this.fats = -1;
         this.carbs = -1;
         this.proteins = -1;
+        this.fiber = -1;
+        this.sugars = -1;
+        this.sodium = -1;
         this.ingredients = new HashSet<>();
     }
 
     public Food(String name, double grade, double calories, double fats,
-                double carbs, double proteins, Set<String> ingredients) {
-        this.name = name;
+                double carbs, double proteins, double sugars, double fiber,double sodium, Set<String> ingredients) {
+        this.name = name ;
         this.time = System.currentTimeMillis();
         this.grade = grade;
         this.calories = calories;
         this.fats = fats;
         this.carbs = carbs;
         this.proteins = proteins;
+        this.sugars = sugars;
+        this.fiber = fiber;
+        this.sodium = sodium;
         this.ingredients = ingredients;
+    }
+
+    public double getSodium() {
+        return sodium;
+    }
+
+    public void setSodium(double sodium) {
+        this.sodium = sodium;
     }
 
     public long getTime() {
         return this.time;
     }
 
-    public String getName() {
-        return this.name;
+    public double getSugars() {
+        return sugars;
+    }
+
+    public void setSugars(double sugars) {
+        this.sugars = sugars;
+    }
+
+    public double getFiber() {
+        return fiber;
+    }
+
+    public void setFiber(double fiber) {
+        this.fiber = fiber;
     }
 
     public double getGrade() {
@@ -75,7 +104,17 @@ public class Food implements Timed {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public double getFats() {
+        return fats;
+    }
+
+
     public void setGrade(double grade) {
+
         this.grade = grade;
     }
 
@@ -99,9 +138,6 @@ public class Food implements Timed {
         this.ingredients = ingredients;
     }
 
-    public void addIngredient(String ingredient) {
-        this.ingredients.add(ingredient);
-    }
 
     public Map<String, Double> getMap() {
         Map<String, Double> map = new HashMap<>();
@@ -118,6 +154,15 @@ public class Food implements Timed {
             map.put("carbs", this.carbs);
         }
         if (this.proteins != -1) {
+            map.put("proteins", this.proteins);
+        }
+        if (this.sodium != -1) {
+            map.put("proteins", this.proteins);
+        }
+        if (this.fiber != -1) {
+            map.put("proteins", this.proteins);
+        }
+        if (this.sugars != -1) {
             map.put("proteins", this.proteins);
         }
         return map;

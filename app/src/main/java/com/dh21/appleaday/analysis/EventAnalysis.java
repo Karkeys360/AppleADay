@@ -31,8 +31,12 @@ public class EventAnalysis {
     }
 
     public int getNumEventsWithName(String eventName) {
+        return getNumEventsWithName(this.times, eventName);
+    }
+
+    private int getNumEventsWithName(List<Timed> times, String eventName) {
         int numEvents = 0;
-        for (Timed time : this.times) {
+        for (Timed time : times) {
             try {
                 Event event = (Event) time;
                 if (event.getName().equals(eventName)) {
@@ -46,18 +50,7 @@ public class EventAnalysis {
     }
 
     public int getNumFoodsWithName(String foodName) {
-        int numFoods = 0;
-        for (Timed time : this.times) {
-            try {
-                Food food = (Food) time;
-                if (food.getName().equals(foodName)) {
-                    numFoods++;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return numFoods;
+        return getNumFoodsWithName(this.times, foodName);
     }
 
     private int getNumFoodsWithName(List<Timed> times, String foodName) {
@@ -102,22 +95,27 @@ public class EventAnalysis {
     }
 
     public double getFoodGivenEventProbability(String foodName, String eventName) {
-        return 1.0 * getNumIntervalsWithFoodAndEvent(foodName, eventName) / getNumEventsWithName(eventName);
+        return 1.0 * getNumEventsCausedByFood(foodName, eventName) / getNumEventsWithName(eventName);
     }
 
-    public int getNumIntervalsWithFoodAndEvent(String foodName, String eventName) {
+    // Computes sensitivity using Bayes Theorem
+    public double getEventGivenFoodProbability(String eventName, String foodName) {
+        return 1.0 * getNumEventsCausedByFood(foodName, eventName) / getNumFoodsWithName(foodName);
+    }
+
+    public int getNumEventsCausedByFood(String foodName, String eventName) {
         // number of intervals in which food with `foodName` was eaten and event with `eventName` happened
         int cnt = 0;
 
         int intervalLengthMillis = INTERVAL_LENGTH_DAYS * HOURS_PER_DAY * SECONDS_PER_HOUR * MILLIS_PER_SECOND;
         for (Timed time : times) {
             try {
-                Event event = (Event) time;
-                List<Timed> interval = Util.getInterval(times, event.getTime() - intervalLengthMillis, event.getTime());
+                Food food = (Food) time;
 
-                // check if food was eaten recently before the event
-                if (event.getName().equals(eventName) && getNumFoodsWithName(interval, foodName) > 0) {
-                    cnt++;
+                // check how many events this food may have caused
+                if (food.getName().equals(foodName)) {
+                    List<Timed> interval = Util.getInterval(times, food.getTime(), food.getTime() + intervalLengthMillis);
+                    cnt += getNumEventsWithName(interval, eventName);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -147,6 +145,7 @@ public class EventAnalysis {
             System.out.println(ea.getFoodProbability("bread"));
 
             System.out.println(ea.getFoodGivenEventProbability("pizza", "gas"));
+            System.out.println(ea.getEventGivenFoodProbability("gas", "pizza"));
         }
     }
 }
