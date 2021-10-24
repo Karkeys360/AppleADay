@@ -34,7 +34,7 @@ public class Food implements Timed {
     }
 
     public Food(String name, double grade, double calories, double fats,
-                double carbs, double proteins, double sugars, double fiber,double sodium, Set<String> ingredients) {
+                double carbs, double proteins, double sugars, double fiber, double sodium, Set<String> ingredients) {
         this.name = name ;
         this.time = System.currentTimeMillis();
         this.grade = grade;
