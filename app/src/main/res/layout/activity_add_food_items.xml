@@ -32,5 +32,25 @@
         app:layout_constraintStart_toEndOf="@+id/nav_host_fragment_activity_main"
         app:layout_constraintTop_toTopOf="parent"
         />
+    <TextView
+        android:id="@+id/item1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+    <TextView
+        android:id="@+id/item2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+    <TextView
+        android:id="@+id/item3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+    <TextView
+        android:id="@+id/item4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

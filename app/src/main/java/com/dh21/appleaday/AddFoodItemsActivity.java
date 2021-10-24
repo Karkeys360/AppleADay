@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import com.dh21.appleaday.analysis.EventAnalysis;
 import com.dh21.appleaday.data.Food;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -20,13 +21,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class AddFoodItemsActivity extends AppCompatActivity {
 
     private Button openScanner;
+    private int numItems = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +38,21 @@ public class AddFoodItemsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_food_items);
         openScanner = findViewById(R.id.openScanner);
 
+        TextView tv = findViewById(R.id.item1);
+        tv.setText("Items: ");
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
+
         ActivityResultLauncher<Void> launcher = registerForActivityResult(new ScannerContract(), food -> {
             if (food != null) {
                 Log.d("MainActivity", "Food: " + food.getName());
+                if (numItems == 0) {
+                    tv.setText(tv.getText() + food.getName());
+                } else {
+                    tv.setText(tv.getText() + ", " + food.getName());
+                }
+                EventAnalysis ea = EventAnalysis.getInstance();
+                ea.addTime(food);
+                numItems++;
             } else {
                 Log.d("MainActivity", "No food found");
             }
@@ -51,6 +67,7 @@ public class AddFoodItemsActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Camera allowed!", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     @Override
@@ -74,6 +91,7 @@ public class AddFoodItemsActivity extends AppCompatActivity {
         public Food parseResult(int resultCode, @Nullable Intent intent) {
             if (intent != null) {
                 String foodJson = intent.getStringExtra("food");
+                Log.d("HELLO", foodJson);
                 return new Gson().fromJson(foodJson, Food.class);
             } else {
                 return null;
