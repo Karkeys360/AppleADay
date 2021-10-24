@@ -6,20 +6,20 @@
     app:startDestination="@+id/navigation_home">
 
     <fragment
+        android:id="@+id/navigation_history"
+        android:name="com.dh21.appleaday.ui.history.HistoryFragment"
+        android:label="@string/title_history"
+        tools:layout="@layout/fragment_history" />
+
+    <fragment
         android:id="@+id/navigation_home"
         android:name="com.dh21.appleaday.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_trends"
         android:name="com.dh21.appleaday.ui.trends.TrendsFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/title_trends"
         tools:layout="@layout/fragment_trends" />
-
-    <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.dh21.appleaday.ui.history.HistoryFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_history" />
 </navigation>
