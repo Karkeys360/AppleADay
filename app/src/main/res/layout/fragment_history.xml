@@ -7,7 +7,7 @@
     tools:context=".ui.history.HistoryFragment">
 
     <Button
-        android:id="@+id/button100"
+        android:id="@+id/mealsButton"
         android:layout_width="170dp"
         android:layout_height="80dp"
         android:layout_marginStart="20dp"
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button101"
+        android:id="@+id/eventsButton"
         android:layout_width="170dp"
         android:layout_height="80dp"
         android:layout_marginTop="20dp"
@@ -60,8 +60,9 @@
             app:layout_constraintHorizontal_bias="0.5">
 
             <LinearLayout
+                android:id="@+id/scrollList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:orientation="vertical" />
