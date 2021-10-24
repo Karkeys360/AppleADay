@@ -14,8 +14,8 @@ import com.dh21.appleaday.databinding.FragmentHistoryBinding;
 
 public class HistoryFragment extends Fragment {
 
-    private static int DEF_BTN_RES = R.drawable.roundedbutton;
-    private static int PRESSED_BTN_RES = R.drawable.roundedbutton_pressed;
+    private static final int DEF_BTN_RES = R.drawable.roundedbutton;
+    private static final int PRESSED_BTN_RES = R.drawable.roundedbutton_pressed;
 
     private enum Display {
         Food, Event
