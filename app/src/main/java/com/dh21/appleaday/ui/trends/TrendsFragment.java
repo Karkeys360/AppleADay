@@ -51,8 +51,6 @@ public class TrendsFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         dashboardViewModel = new ViewModelProvider(this).get(TrendsViewModel.class);
 
-        MockDataGenerator.generate();
-
         binding = FragmentTrendsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
