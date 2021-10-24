@@ -1,11 +1,14 @@
 package com.dh21.appleaday;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.dh21.appleaday.ui.home.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -34,6 +37,16 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
     }
 
+    public void openAddFoodItemsActivity(View view) {
+        Intent intent = new Intent(MainActivity.this, AddFoodItemsActivity.class);
+        startActivity(intent);
+    }
+
+    public void openEnterEvent(View view) {
+        DialogFragment fragment = new EnterEventDialog();
+        fragment.show(getSupportFragmentManager(), "enter_events");
+    }
 }

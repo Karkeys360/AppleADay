@@ -40,10 +40,11 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/roundedbutton"
         android:padding="5dp"
-        android:text="@string/add_meal"
+        android:text="Add Meal"
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:onClick="openAddFoodItemsActivity"
 
         app:layout_constraintEnd_toStartOf="@+id/nav_host_fragment_activity_main"
         app:layout_constraintHorizontal_bias="0.5"
@@ -58,14 +59,16 @@
         android:layout_marginTop="300dp"
         android:background="@drawable/roundedbutton"
         android:padding="5dp"
-        android:text="@string/add_event"
+        android:text="Add Event"
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:onClick="openEnterEvent"
         app:layout_constraintEnd_toStartOf="@+id/nav_host_fragment_activity_main"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/nav_host_fragment_activity_main"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <GridLayout
         android:id="@+id/table2"
