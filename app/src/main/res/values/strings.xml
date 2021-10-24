@@ -2,8 +2,8 @@
     <string name="app_name">AppleADay</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_history">History</string>
+    <string name="title_trends">Trends</string>
     <string name="add_meal">Add Meal</string>
     <string name="add_event">Add Event</string>
 </resources>
