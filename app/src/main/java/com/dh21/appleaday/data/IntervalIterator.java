@@ -5,7 +5,7 @@ import java.util.List;
 
 public class IntervalIterator {
 
-    public static enum Interval {
+    public enum Interval {
         Day, Week, Month
     }
 
@@ -17,6 +17,10 @@ public class IntervalIterator {
         this.times = times;
         this.index = times.size() - 1;
         this.interval = interval;
+    }
+
+    public Interval getInterval() {
+        return interval;
     }
 
     public List<Timed> next() {

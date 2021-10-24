@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,13 +34,16 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.TreeMap;
 
-public class TrendsFragment extends Fragment {
+import static com.dh21.appleaday.data.IntervalIterator.Interval;
+
+public class TrendsFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private TrendsViewModel dashboardViewModel;
     private FragmentTrendsBinding binding;
@@ -49,18 +55,30 @@ public class TrendsFragment extends Fragment {
         binding = FragmentTrendsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        Spinner intervalSpinner = binding.intervalSpinner;
+        String[] options = Arrays.stream(Interval.values())
+                .map(Interval::name).toArray(String[]::new);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(),
+                android.R.layout.simple_spinner_item, options);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        intervalSpinner.setAdapter(adapter);
+        intervalSpinner.setOnItemSelectedListener(this);
 
+        generateGraphs(Interval.Day);
+
+        return root;
+    }
+
+    private void generateGraphs(Interval interval) {
         LinearLayout layout = binding.chartList;
-
-        // TODO: add spinner for interval at the top
+        layout.removeAllViews();
 
         String[] keys = {"calories", "fats", "carbs", "proteins", "sodium", "fiber", "sugars"};
 
         for (int i = 0; i < keys.length; i++) {
-            layout.addView(createChart(new IntervalIterator(EventAnalysis.getInstance().getTimes(), IntervalIterator.Interval.Day), IntervalIterator.Interval.Day, keys[i], i == keys.length - 1));
+            layout.addView(createChart(new IntervalIterator(EventAnalysis.getInstance().getTimes(),
+                    interval), keys[i], i == keys.length - 1));
         }
-
-        return root;
     }
 
     private int dpToPixels(int dp) {
@@ -91,7 +109,7 @@ public class TrendsFragment extends Fragment {
         return layout;
     }
 
-    private String dateToLabel(long timestamp, IntervalIterator.Interval interval) {
+    private String dateToLabel(long timestamp, Interval interval) {
         if (timestamp == -1) {
             return "nope";
         }
@@ -112,7 +130,7 @@ public class TrendsFragment extends Fragment {
     }
 
     private ValueFormatter createDateVF(TreeMap<Float, Long> entryMap,
-                                        IntervalIterator.Interval interval) {
+                                        Interval interval) {
         return new ValueFormatter() {
 
             @Override
@@ -133,10 +151,9 @@ public class TrendsFragment extends Fragment {
         };
     }
 
-    private View createChart(IntervalIterator iterator, IntervalIterator.Interval interval,
-                             String key, boolean last) {
+    private View createChart(IntervalIterator iterator, String key, boolean last) {
+        Interval interval = iterator.getInterval();
         String titleKey = key.substring(0, 1).toUpperCase() + key.substring(1);
-        // TODO: uncomment when using the actual mock data
         LinkedList<Entry> vals = new LinkedList<>();
         List<Timed> entries;
         while ((entries = iterator.next()) != null) {
@@ -170,6 +187,7 @@ public class TrendsFragment extends Fragment {
         chart.setDoubleTapToZoomEnabled(false);
         chart.setScaleYEnabled(false);
         chart.setScaleXEnabled(true);
+        // TODO: config bar colors
 
         TextView title = new TextView(ctx);
         title.setText(String.format("%s Consumed (%s per %s)", titleKey, DataUtil.getUnit(key),
@@ -182,6 +200,16 @@ public class TrendsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        Interval interval = Interval.values()[i];
+        generateGraphs(interval);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
     }
 
     private static class Entry {

@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class MockDataGenerator {
 
-    public static final int DAYS_IN_MONTH = 30;
+    public static final int DAYS_OF_DATA = 60;
     public static final int MEALS_IN_DAY = 4;
     public static final long MILLIS_IN_DAY = 86400000;
     public static final long MILLIS_BETWEEN_MEALS = 9000000;  // 2.5 hours
@@ -25,7 +25,7 @@ public class MockDataGenerator {
 
         Random rand = new Random();
         List<Timed> times = new ArrayList<>();
-        for (int i = 0; i < DAYS_IN_MONTH; i++) {
+        for (int i = 0; i < DAYS_OF_DATA; i++) {
             for (int j = 0; j < MEALS_IN_DAY; j++) {
                 long time = MILLIS_OF_FIRST_MEAL + i * MILLIS_IN_DAY + j * MILLIS_BETWEEN_MEALS;
                 int foodAmount = 1;
