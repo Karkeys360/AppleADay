@@ -97,7 +97,7 @@ public class MockDataGenerator {
                     else {
                         Food food;
                         if (foodItem == 0) {
-                            food = new Food("proteinbar", 0, 190, 6, 22, 21, 2, 10, 140, new HashSet<>());
+                            food = new Food("protein bar", 0, 190, 6, 22, 21, 2, 10, 140, new HashSet<>());
                         } else if (foodItem == 1) {
                             food = new Food("yogurt", 0, 150, 2, 27, 6, 19, 0, 90, new HashSet<>());
                         } else if (foodItem == 2) {

@@ -1,6 +1,8 @@
 package com.dh21.appleaday.ui.history;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +35,9 @@ public class HistoryFragment extends Fragment {
     private static final int PRESSED_BTN_RES = R.drawable.roundedbutton_pressed;
 
     private static final int NUM_DISPLAYED = 50;
+    public static final int FONT_SIZE = 20;
+    public static final int ROW_PADDING = 4;
+    public static final int FONT_COLOR = Color.WHITE;
 
     private enum Display {
         Food, Event
@@ -99,8 +104,7 @@ public class HistoryFragment extends Fragment {
     }
 
     private String titleCase(String str) {
-        String[] words = str.split("\\s");
-        return Arrays.stream(words)
+        return Arrays.stream(str.split("\\s"))
                 .map(s -> s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase())
                 .collect(Collectors.joining(" "));
     }
@@ -112,14 +116,18 @@ public class HistoryFragment extends Fragment {
 
     private void addRowToLayout(GridLayout gl, String name, long timestamp, int row) {
         TextView nameText = new TextView(requireContext());
-        nameText.setText(name);
+        nameText.setText(titleCase(name));
         nameText.setGravity(Gravity.CENTER);
+        nameText.setTextSize(TypedValue.COMPLEX_UNIT_SP, FONT_SIZE);
+        nameText.setTextColor(FONT_COLOR);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd", Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mma MMM dd", Locale.US);
         String dateStr = sdf.format(new Date(timestamp));
         TextView dateText = new TextView(requireContext());
         dateText.setGravity(Gravity.CENTER);
         dateText.setText(dateStr);
+        dateText.setTextSize(TypedValue.COMPLEX_UNIT_SP, FONT_SIZE);
+        dateText.setTextColor(FONT_COLOR);
 
         gl.addView(nameText);
         gl.addView(dateText);
@@ -132,7 +140,7 @@ public class HistoryFragment extends Fragment {
         GridLayout.LayoutParams param =new GridLayout.LayoutParams();
         param.height = GridLayout.LayoutParams.WRAP_CONTENT;
         param.width = GridLayout.LayoutParams.WRAP_CONTENT;
-        param.setMargins(0, dpToPixels(3), 0, dpToPixels(3));
+        param.setMargins(0, dpToPixels(ROW_PADDING), 0, dpToPixels(ROW_PADDING));
 //        param.rightMargin = 5;
 //        param.topMargin = 5;
 //        param.setGravity(Gravity.CENTER);
