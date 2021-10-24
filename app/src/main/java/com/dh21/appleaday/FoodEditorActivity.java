@@ -106,7 +106,7 @@ public class FoodEditorActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 String value = s.toString();
                 Double num = Double.valueOf(value);
-                food.setCalories(num);
+                food.setCarbs(num);
                 setDisplay();
             }
         });
