@@ -8,6 +8,7 @@ import com.dh21.appleaday.data.Timed;
 import java.util.ArrayList;
 import java.util.List;
 
+// Singleton class
 public class EventAnalysis {
     public static int INTERVAL_LENGTH_DAYS = 3;
     public static int HOURS_PER_DAY = 24;
@@ -16,10 +17,23 @@ public class EventAnalysis {
 
     private static boolean DEBUG = true;
 
+    private static EventAnalysis instance = new EventAnalysis(new ArrayList<Timed>());
     private List<Timed> times;
 
-    public EventAnalysis(List<Timed> times) {
+    private EventAnalysis(List<Timed> times) {
         this.times = times;
+    }
+
+    public static EventAnalysis getInstance() {
+        return instance;
+    }
+
+    public void addTime(Timed time) {
+        this.times.add(time);
+    }
+
+    public void addTimes(List<Timed> times) {
+        this.times.addAll(times);
     }
 
     public double getEventProbability(String eventName) {
@@ -130,7 +144,8 @@ public class EventAnalysis {
             times.add(e);
             times.add(e2);
 
-            EventAnalysis ea = new EventAnalysis(times);
+            EventAnalysis ea = EventAnalysis.getInstance();
+            ea.addTimes(times);
             System.out.println(ea.getEventProbability("vomit"));
             System.out.println(ea.getFoodProbability("bread"));
 
