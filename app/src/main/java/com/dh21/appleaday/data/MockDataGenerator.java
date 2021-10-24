@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class MockDataGenerator {
 
-    public static final int DAYS_IN_MONTH = 99999;
+    public static final int DAYS_IN_MONTH = 100;
     public static final int MEALS_IN_DAY = 4;
     public static final long MILLIS_IN_DAY = 86400000;
     public static final long MILLIS_BETWEEN_MEALS = 9000000;  // 2.5 hours
