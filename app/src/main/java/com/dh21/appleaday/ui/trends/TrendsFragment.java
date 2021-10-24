@@ -3,6 +3,7 @@ package com.dh21.appleaday.ui.trends;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,40 +87,47 @@ public class TrendsFragment extends Fragment implements AdapterView.OnItemSelect
         generateSensitivities();
     }
 
-    private View createRow(String event, String food, double sensitivity) {
-        sensitivity = Math.random();
+    private View createSensitivityRow(String event, String food, double sensitivity) {
         ConstraintLayout layout = new ConstraintLayout(requireActivity());
         layout.setId(View.generateViewId());
         layout.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         ConstraintSet cs = new ConstraintSet();
-        cs.clone(layout);
 
+        ConstraintLayout.LayoutParams eventParams = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        eventParams.width = dpToPixels(90);
         TextView eventText = new TextView(requireActivity());
         eventText.setId(View.generateViewId());
         eventText.setText(event);
+        eventText.setLayoutParams(eventParams);
 
         ProgressBar pbar = new ProgressBar(requireActivity(), null,
                 android.R.attr.progressBarStyleHorizontal);
+        ConstraintLayout.LayoutParams pbarParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_CONSTRAINT, ViewGroup.LayoutParams.WRAP_CONTENT);
         pbar.setId(View.generateViewId());
         pbar.setIndeterminate(false);
+        pbar.setLayoutParams(pbarParams);
         pbar.setProgress((int) Math.round(Math.min(1, sensitivity) * 100.0));
 
+        ConstraintLayout.LayoutParams foodParams = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        foodParams.width = dpToPixels(90);
         TextView foodText = new TextView(requireActivity());
+        foodText.setGravity(Gravity.RIGHT);
         foodText.setId(View.generateViewId());
         foodText.setText(food);
+        foodText.setLayoutParams(foodParams);
 
-
-
-        Log.d("Trends", String.format("Ids: %s", Arrays.toString(new int[]{eventText.getId(), pbar.getId(), foodText.getId()})));
 
         layout.addView(eventText);
-        cs.connect(eventText.getId(), ConstraintSet.START, layout.getId(), ConstraintSet.START);
-        cs.connect(eventText.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP);
         layout.addView(foodText);
-        cs.connect(foodText.getId(), ConstraintSet.END, layout.getId(), ConstraintSet.END);
-        cs.connect(foodText.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP);
         layout.addView(pbar);
+        cs.clone(layout);
+        Log.d("Trends", String.format("Ids: %s", Arrays.toString(new int[]{eventText.getId(), pbar.getId(), foodText.getId()})));
+
+        cs.connect(eventText.getId(), ConstraintSet.START, layout.getId(), ConstraintSet.START, dpToPixels(15));
+        cs.connect(eventText.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP);
+        cs.connect(foodText.getId(), ConstraintSet.END, layout.getId(), ConstraintSet.END, dpToPixels(15));
+        cs.connect(foodText.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP);
         cs.connect(pbar.getId(), ConstraintSet.START, eventText.getId(), ConstraintSet.END);
         cs.connect(pbar.getId(), ConstraintSet.END, foodText.getId(), ConstraintSet.START);
         cs.connect(pbar.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP);
@@ -151,11 +159,12 @@ public class TrendsFragment extends Fragment implements AdapterView.OnItemSelect
                 double sensitivity = ea.getEventGivenFoodProbability(event, sensitiveFood);
                 Log.d("Trends", String.format("Event=%s, Food=%s, sensitivity=%.3f", event, sensitiveFood, sensitivity));
                 if (sensitivity >= SENSITIVITY_THRESHOLD) {
-                    View row = createRow(event, sensitiveFood, sensitivity);
+                    View row = createSensitivityRow(event, sensitiveFood, sensitivity);
                     layout.addView(row);
                 }
             }
         }
+        Log.d("Trends", "Added!");
     }
 
     private void generateGraphs(Interval interval) {

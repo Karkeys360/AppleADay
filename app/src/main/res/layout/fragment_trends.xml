@@ -20,6 +20,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="Analyzed Sensitivities"
+                android:textSize="20sp" />
+
             <LinearLayout
                 android:id="@+id/sensitivityList"
                 android:layout_width="match_parent"
