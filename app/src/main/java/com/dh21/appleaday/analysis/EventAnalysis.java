@@ -7,11 +7,13 @@ import androidx.annotation.RequiresApi;
 import com.dh21.appleaday.data.DataUtil;
 import com.dh21.appleaday.data.Event;
 import com.dh21.appleaday.data.Food;
+import com.dh21.appleaday.data.MockDataGenerator;
 import com.dh21.appleaday.data.Timed;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -68,9 +70,14 @@ public class EventAnalysis {
             int intervalLengthMillis = INTERVAL_LENGTH_DAYS * HOURS_PER_DAY * SECONDS_PER_HOUR * MILLIS_PER_SECOND;
             List<Timed> intervalTimes = DataUtil.getInterval(this.times, event.getTime() - intervalLengthMillis, event.getTime());
 
+            Set<String> foodNames = new HashSet<>();
             for (Timed intervalTime : intervalTimes) {
                 if (intervalTime instanceof Food) {
                     Food food = (Food) intervalTime;
+                    if (foodNames.contains(food.getName())) {
+                        continue;
+                    }
+                    foodNames.add(food.getName());
 
                     Map<String, Integer> foodEvents = foodEventsCaused.getOrDefault(food.getName(), new HashMap<String, Integer>());
                     foodEvents.put(event.getName(), foodEvents.getOrDefault(event.getName(), 0) + 1);
@@ -167,6 +174,7 @@ public class EventAnalysis {
     public static void main(String[] args) {
         if (DEBUG) {
             // testing
+            /*
             Food f = new Food("pizza");
             Food f2 = new Food("bread");
             Food f3 = new Food("bread");
@@ -187,6 +195,16 @@ public class EventAnalysis {
 
             System.out.println(ea.getFoodGivenEventProbability("pizza", "gas"));
             System.out.println(ea.getEventGivenFoodProbability("gas", "pizza"));
+            */
+            MockDataGenerator.generate();
+
+            EventAnalysis ea = EventAnalysis.getInstance();
+            System.out.println(ea.getFoodGivenEventProbability("burrito", "diarrhea")); // 1.0
+            System.out.println(ea.getEventGivenFoodProbability("diarrhea", "burrito")); // 0.8
+            System.out.println(ea.getEventGivenFoodProbability("bloating", "hashbrown")); // 0.7
+            System.out.println(ea.getEventGivenFoodProbability("constipation", "burger")); // 0.3
+            System.out.println(ea.getEventGivenFoodProbability("bloating", "burrito"));
+            System.out.println(ea.getEventGivenFoodProbability("constipation", "milk"));
         }
     }
 }

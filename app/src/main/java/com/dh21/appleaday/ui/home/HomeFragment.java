@@ -1,18 +1,26 @@
 package com.dh21.appleaday.ui.home;
 
+import android.content.Intent;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.dh21.appleaday.AddFoodItemsActivity;
+import com.dh21.appleaday.EnterEventDialog;
+import com.dh21.appleaday.MainActivity;
 import com.dh21.appleaday.R;
 import com.dh21.appleaday.databinding.FragmentHomeBinding;
 
@@ -29,6 +37,8 @@ public class HomeFragment extends Fragment {
                 new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding.addMealBtn.setOnClickListener(this::openAddFoodItemsActivity);
+        binding.enterEventBtn.setOnClickListener(this::openEnterEvent);
         View root = binding.getRoot();
         return root;
     }
@@ -37,5 +47,15 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    public void openAddFoodItemsActivity(View view) {
+        Intent intent = new Intent(getActivity(), AddFoodItemsActivity.class);
+        startActivity(intent);
+    }
+
+    public void openEnterEvent(View view) {
+        DialogFragment fragment = new EnterEventDialog();
+        fragment.show(getActivity().getSupportFragmentManager(), "enter_events");
     }
 }

@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class MockDataGenerator {
 
-    public static final int DAYS_OF_DATA = 60;
+    public static final int DAYS_IN_MONTH = 100;
     public static final int MEALS_IN_DAY = 4;
     public static final long MILLIS_IN_DAY = 86400000;
     public static final long MILLIS_BETWEEN_MEALS = 9000000;  // 2.5 hours
@@ -25,7 +25,7 @@ public class MockDataGenerator {
 
         Random rand = new Random();
         List<Timed> times = new ArrayList<>();
-        for (int i = 0; i < DAYS_OF_DATA; i++) {
+        for (int i = 0; i < DAYS_IN_MONTH; i++) {
             for (int j = 0; j < MEALS_IN_DAY; j++) {
                 long time = MILLIS_OF_FIRST_MEAL + i * MILLIS_IN_DAY + j * MILLIS_BETWEEN_MEALS;
                 int foodAmount = 1;
@@ -112,25 +112,26 @@ public class MockDataGenerator {
                     }
                 }
                 // Add events 2 hours after meal if necessary
-                if (hasDiarrhea) {
+                Random rnd = new Random();
+                if (rnd.nextInt(10) < 8 && hasDiarrhea) {
                     Event event = new Event("diarrhea");
                     event.setSeverity(5);
                     event.setTime(time + MILLIS_TILL_EVENT);
                     times.add(event);
                 }
-                if (hasFlatulence) {
+                if (rnd.nextInt(10) < 6 && hasFlatulence) {
                     Event event = new Event("flatulence");
                     event.setSeverity(5);
                     event.setTime(time + MILLIS_TILL_EVENT);
                     times.add(event);
                 }
-                if (hasBloating) {
+                if (rnd.nextInt(10) < 7 && hasBloating) {
                     Event event = new Event("bloating");
                     event.setSeverity(5);
                     event.setTime(time + MILLIS_TILL_EVENT);
                     times.add(event);
                 }
-                if (hasConstipation) {
+                if (rnd.nextInt(10) < 3 && hasConstipation) {
                     Event event = new Event("constipation");
                     event.setSeverity(5);
                     event.setTime(time + MILLIS_TILL_EVENT);
