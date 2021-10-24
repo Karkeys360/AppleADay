@@ -63,6 +63,7 @@ public class MockDataGenerator {
                     else if (j == 1) {
                         Food food;
                         if (foodItem == 0) {
+                            hasConstipation = true;
                             food = new Food("burger", 3, 480, 27, 45, 16, 6, 3, 640, new HashSet<>());
                         } else if (foodItem == 1) {
                             food = new Food("sandwich", 2, 361, 16.7, 32.5, 19.3, 5.13, 2.3, 1320, new HashSet<>());
@@ -83,6 +84,7 @@ public class MockDataGenerator {
                         if (foodItem == 0) {
                             food = new Food("steak", 2, 679, 48, 0, 62, 0, 0, 146, new HashSet<>());
                         } else if (foodItem == 1) {
+                            hasDiarrhea = true;
                             food = new Food("burrito", 1, 970, 25, 134, 56, 9, 18, 2340, new HashSet<>());
                         } else if (foodItem == 2) {
                             food = new Food("salmon", 1, 412, 27, 0, 40, 0, 0, 117, new HashSet<>());
