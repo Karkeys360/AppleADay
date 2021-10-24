@@ -17,13 +17,11 @@
         <activity android:name=".FoodEditorActivity" />
         <activity android:name=".EventEditorActivity" />
         <activity android:name=".ScanningActivity" />
-        <activity android:name=".MainActivity" >
         <activity
             android:name=".AddFoodItemsActivity"
             android:label="@string/title_activity_add_food_items"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".ScanningActivity" />
-        <activity android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
