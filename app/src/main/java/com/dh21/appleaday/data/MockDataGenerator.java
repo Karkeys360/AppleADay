@@ -16,9 +16,6 @@ public class MockDataGenerator {
     public static final long MILLIS_TILL_EVENT =7200000;  // 2 hours
     public static final long MILLIS_OF_FIRST_MEAL = 1577901600000L;  // 1/1/2020 11 AM PST
 
-    public static void main(String[] args) {
-    }
-
     public static void generate () {
 
         // diarrhea - burrito
