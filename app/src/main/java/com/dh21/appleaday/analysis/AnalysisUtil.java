@@ -4,12 +4,7 @@ import android.content.Context;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
-
-import com.google.gson.Gson;
-
 
 public class AnalysisUtil {
 
