@@ -2,13 +2,29 @@ package com.dh21.appleaday;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class HttpQuery {
     public static String HTTP_ENDPOINT_PREFIX = "https://world.openfoodfacts.org/api/v0/product/";
+    private static Executor executor = Executors.newSingleThreadExecutor();
+
+    public static void getFoodFactsAsync(String barcode, CompletableFuture<String> callback) {
+        executor.execute(() -> {
+            String json = getFoodFacts(barcode);
+            if (json == null) {
+                callback.completeExceptionally(new IOException("HTTP error!"));
+            } else {
+                callback.complete(json);
+            }
+        });
+    }
 
     public static String getFoodFacts(String barcode) {
         String targetURL = HTTP_ENDPOINT_PREFIX + barcode + ".json";
