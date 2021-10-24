@@ -101,7 +101,7 @@ public class EventAnalysis {
     }
 
     public List<Timed> getTimes() {
-        return this.times;
+        return Collections.unmodifiableList(this.times);
     }
 
     public double getEventProbability(String eventName) {
